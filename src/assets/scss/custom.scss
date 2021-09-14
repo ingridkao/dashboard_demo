@@ -1,0 +1,778 @@
+@import "./_color";
+@import "./basic";
+@import "./scrollbar";
+
+body{
+    .el-container{
+        background-color: darken($blackColor, 2);
+    }
+    .el-divider{
+        background-color: lighten($blackColor, 10);
+        margin: 1rem 0;
+    }
+    .el-form{
+        &.scrollDialog{
+            @include scrollbar_style;
+            overflow-y: scroll;
+            max-height: 65vh;
+            padding-right: .5rem;
+        }
+        .miniForm{
+            border-top: 1px solid darken($grayColor, 2);
+            padding-top: .5rem;
+            .el-form-item{
+                margin-bottom: 1rem;
+            }
+        }
+        p.titleText{
+            color: lighten($grayColor, 50);
+            margin-bottom: .5rem;
+        }
+    }
+    .el-form-item{
+        &__label{
+            text-align: left;
+            color: lighten($grayColor, 20);
+        }
+        &__content{
+            .el-select{
+                width: 100%;
+            }
+        }
+    }
+    .el-textarea__inner{
+        @include scrollbar_style;
+    }
+    .el-textarea__inner,
+    .el-input__inner{
+        background-color: $blackColor;
+        color: $borderColor;
+        border-color: lighten($PrimaryColor,10);
+        &:hover{
+            border-color: $PrimaryColor;
+        }
+        &:focus{
+            border-color: lighten($PrimaryColor, 5);
+        }
+        &::placeholder {
+            color: lighten($grayColor, 30);
+        }
+    }
+    .el-input{
+        .el-input__count .el-input__count-inner{
+            background-color: transparent;
+        }
+        &-group__append{
+            background-color: lighten($blackColor, 15);
+            border-color: $mainBorderColor;
+            color: $borderColor;
+            .el-button:hover{
+                background-color: rgba($whiteColor, 0.05);
+            }
+        }
+        &--small{
+            max-width: 10rem;
+            margin-right: .5rem;
+        }
+    }
+    .el-select{
+        &--small{
+            max-width: 10rem;
+            margin-right: .5rem;
+        }
+        &-group__title{
+            color: lighten($blackColor, 50);
+            padding-left: .5rem;
+        }
+        &-group__wrap:not(:last-of-type)::after{
+            background: $grayColor;
+        }
+        &-group{
+            .el-select-dropdown__item{
+                color: lighten($blackColor, 40);
+                &.hover,
+                &:hover{
+                    background-color: rgba($blackColor, 0.3);
+                }
+                &.selected{
+                    color: $whiteColor;
+                }
+                &.is-disabled{
+                    opacity: 0.3;
+                }
+            }
+        }
+        .is-disabled .el-input__inner{
+            opacity: 0.5;
+        }
+        &:hover .el-input__inner,
+        .el-input__inner:focus{
+            border-color: $PrimaryColor;
+        }
+    }
+    .is-focus{
+        .el-checkbox__inner,
+        .el-input__inner{
+            border-color: $PrimaryColor !important;
+        }
+    }
+    .is-active .el-input__inner{
+        border-color: $PrimaryColor !important;
+    }
+    .disabledInput .el-input__inner{
+        background: transparent !important;
+        opacity: 0.3;
+    }
+    .el-range-editor.custom{
+        width: 100%;
+        .el-icon-time{
+            display: none;
+        }
+        .el-range-separator{
+            color: darken($whiteColor, 50);
+        }
+        .el-range-input{
+            width: 42.5%;
+            background: transparent;
+            color: #ddd;
+            font-size: 0.8rem;
+        }
+    }
+    .el-date-range-picker.custom{
+        .el-icon-arrow-right,
+        .el-button--text,
+        .el-picker-panel__icon-btn{
+            color: darken($whiteColor, 35);
+            &:hover{
+                color: darken($whiteColor, 15);
+            }
+        }
+        .el-picker-panel__icon-btn{
+            margin: .65rem 1rem;
+        }
+        .el-picker-panel__body{
+            *{
+                border-right-color: rgba($whiteColor, 0.1);
+                border-bottom-color: rgba($whiteColor, 0.1);
+            }
+        }
+        .el-time-panel__footer,
+        .el-picker-panel__footer{
+            background: $blackColor;
+            border-top-color: rgba($whiteColor, 0.1);
+        }
+        .el-time-panel__content{
+            &::after, &::before{
+                border-top-color: rgba($whiteColor, 0.1);
+                border-bottom-color: rgba($whiteColor, 0.1);
+            }
+        }
+        .el-time-spinner__item{
+            &:hover:not(.disabled):not(.active){
+                background: transparent;
+            }
+            &.active{
+                color: $whiteColor;
+            }
+        }
+    }
+    .el-popper{
+        background: lighten($mainCardBackgroundColor, 5);
+        border-color: lighten($mainCardBackgroundColor, 2.5);
+        color: $borderColor;
+        @extend %shadow;
+        &[x-placement^=top] .popper__arrow, &[x-placement^=top] .popper__arrow:after{
+            border-top-color: lighten($mainCardBackgroundColor, 5);
+        }
+        &[x-placement^=right] .popper__arrow, &[x-placement^=right] .popper__arrow:after{
+            border-right-color: lighten($mainCardBackgroundColor, 5);
+        }
+        &[x-placement^=bottom] .popper__arrow, &[x-placement^=bottom] .popper__arrow:after{
+            border-bottom-color: lighten($mainCardBackgroundColor, 5);
+        }
+        &[x-placement^=left] .popper__arrow, &[x-placement^=left] .popper__arrow:after{
+            border-left-color: lighten($mainCardBackgroundColor, 5);
+        }
+        .el-popconfirm{
+            padding: 0.25rem 0.25rem 0.25rem 0;
+            &__action{
+                margin: 0.5rem 0 0.25rem 0;
+            }
+        }
+        .el-select-dropdown__item{
+            color: $borderColor;
+            &:hover, &.hover{
+                background: lighten($mainCardBackgroundColor, 10);
+            }
+        }
+        .el-checkbox__input.is-checked+.el-checkbox__label{
+            color: darken($whiteColor, 10);
+        }
+        .popoverHeader{
+            text-align: right;
+            button{
+                padding: 0.15rem;
+                opacity: 0.8;
+                &.is-disabled{
+                    opacity: 0.3;
+                }
+                &:not(.is-disabled):hover{
+                    opacity: 1;
+                }
+                .el-icon-check{
+                    color: $PrimaryColor;
+                }
+                .el-icon-close{
+                    color: lighten($alarmColor, 10);
+                }
+            }
+        }
+        .popoverBody{
+            .el-checkbox-group{
+                label{
+                    display: block;
+                    margin: 0.5rem 0;
+                }
+            }
+        }
+    }
+    .el-checkbox{
+        &__inner{
+            background: rgba($blackColor, 0.5);
+            border-color: darken($lightTextColor, 5);
+            &:hover{
+                border-color: $lightTextColor;
+            }
+        }
+        &__input{
+            &.is-checked,
+            &.is-indeterminate{
+                .el-checkbox__inner{
+                    background: rgba($lightTextColor, 0.2);
+                    border-color: darken($lightTextColor, 5);
+                }
+            }
+            &.is-disabled,
+            &.is-disabled.is-checked{
+                .el-checkbox__inner{
+                    background: rgba($lightTextColor, 0.3);
+                    border-color: darken($lightTextColor, 10);
+                    opacity:0.6;
+                }
+            }
+        }
+    }
+    .el-dialog{
+        background-color: lighten($blackColor, 2.5);
+        &__title{
+            color: $whiteColor;
+        }
+        &__header{
+            padding: 20px 20px 35px;
+        }
+        &__body{
+            padding-top: 0;
+            h6{
+                font-size: 1rem;
+                color: lighten($blackColor, 60);
+                margin-top: 1.5rem;
+                margin-bottom: .5rem;
+                &.spaceBetween{
+                    @extend %spaceBetween;
+                }
+            }
+        }
+        &__headerbtn{
+            &:hover .el-dialog__close{
+                color: $activeColor;
+            }
+        }
+        &__wrapper{
+            &.filter{
+                header{
+                    margin-bottom: .5rem;
+                }
+                footer{
+                    margin-top: .5rem;
+                }
+                .el-textarea__inner,
+                .el-input__inner{
+                    border-color: lighten($lightTextColor,10);
+                    &:hover{
+                        border-color: $lightTextColor;
+                    }
+                    &:focus{
+                        border-color: lighten($lightTextColor, 5);
+                    }
+                }
+            }
+        }
+    }
+    .el-message-box{
+        border-color: lighten($blackColor, 20);
+        background-color: $blackColor;
+        &__title{
+            color: $whiteColor;
+        }
+        &__body{
+            padding-top: 0;
+            h6{
+                font-size: 1rem;
+                color: lighten($blackColor, 60);
+                margin-top: 1.5rem;
+                margin-bottom: .5rem;
+                &.spaceBetween{
+                    @extend %spaceBetween;
+                }
+            }
+        }
+        &__headerbtn{
+            &:hover .el-dialog__close{
+                color: $activeColor;
+            }
+            .el-message-box__close{
+                color: $activeColor;
+            }
+        }
+        &__btns{
+            .el-button--primary{
+                border-color: $buttonColor;
+                background-color: $buttonColor;
+                color: lighten($blackColor, 10);
+                &:hover{
+                    color: $blackColor;
+                }
+            }
+        }
+    }
+    .el-menu{
+        &-item{
+            &:focus,
+            &:hover{
+                background-color: lighten($blackColor, 1);
+            }
+        }
+    }
+    .el-tabs{
+        &__item{
+            color: darken($whiteColor, 10);
+            &.is-active{
+                color: $whiteColor;
+            }
+        }
+        &__content{
+            border-radius: 3px;
+            background-color: lighten($mainBackgroundColor, 2.5);
+            border: 1px solid lighten($mainBackgroundColor, 15);
+        }
+        &--border-card{
+            background: transparent;
+            border-color: transparent;
+            >.el-tabs__header{
+                background: transparent;
+                border: none;
+                width: calc(100% - 8rem);
+                .el-tabs__item{
+                    color: darken($whiteColor, 25);
+                    background-color: lighten($mainBackgroundColor, 7.5);
+                    border-left: 2px solid lighten($mainBackgroundColor, 20);
+                    border-top: 3px solid lighten($mainBackgroundColor, 20);
+                    border-radius: 3px 3px 0 0;
+                    &:not(.is-disabled):hover{
+                        color: $activeColor;
+                    }
+                    &:first-child{
+                        margin-left: 1rem;
+                        border-left-color: lighten($mainBackgroundColor, 20);
+                    }
+                    &:last-child{
+                        border-right: 1px solid lighten($mainBackgroundColor, 20);
+                    }
+                    &.is-active{
+                        background-color: lighten($mainBackgroundColor, 2.5);
+                        font-weight: bold;
+                        color: $whiteColor !important;
+                        border-top-color: $activeColor;
+                        border-left-color: transparent;
+                    }
+                }
+            }
+        }
+        &__nav-next,
+        &__nav-prev{
+            color:$buttonColor;
+            &:hover{
+                color: lighten($buttonColor, 5);
+            }
+            &.is-disabled{
+                color: darken($buttonColor, 30) !important;
+            }
+        }
+    }
+    .el-button{
+        &.cancel{
+            background-color: $whiteColor;
+            border-color: $whiteColor;
+            &:hover{
+                color: $blackColor;
+                background: darken($whiteColor, 5);
+            }
+        }
+        &.custom{
+            background-color: lighten($blackColor, 15);
+            border-color: $mainBorderColor;
+            color: $borderColor;
+            &:hover{
+                background-color: rgba($whiteColor, 0.05);
+                border-color: $mainBorderColor;
+                color: $borderColor;
+            }
+        }
+        &--info{
+            background: darken($PrimaryColor, 15);
+            border-color: $PrimaryColor;
+            color: $whiteColor;
+            &:hover{
+                background: darken($PrimaryColor, 5);
+            }
+            &:active, &:focus{
+                background: $PrimaryColor;
+            }
+            &.is-plain{
+                background: rgba($whiteColor, 0.05) !important;
+                border-color: darken($darkTextColor, 20);
+                color: darken($whiteColor, 30);
+                &:hover{
+                    background: rgba($whiteColor, 0.1) !important;
+                    border-color: darken($darkTextColor, 10);
+                    color: darken($whiteColor, 20);
+                }
+            }
+            &.dark{
+                background: darken($darkTextColor, 10);
+                border-color: $darkTextColor;
+                &:hover{
+                    background: darken($darkTextColor, 5);
+                }
+                &:active, &:focus{
+                    background: $darkTextColor;
+                }
+            }
+        }
+        &--primary{
+            background-color: $PrimaryColor;
+            border-color: $PrimaryColor;
+            color: $whiteColor;
+            &:hover{
+                background: darken($PrimaryColor, 5);
+                border-color: $PrimaryColor;
+            }
+            &.is-plain{
+                color: $blackColor;
+                font-weight: bold;
+                border-color: $buttonColor;
+                background-color: $buttonColor;
+                &:hover{
+                    color: $blackColor;
+                    border-color: $buttonColor;
+                    background: darken($buttonColor, 5);
+                }
+            }
+            &.is-disabled{
+                background-color: darken($buttonColor, 45);
+                border-color: darken($buttonColor, 45);
+                color: darken($whiteColor, 25);
+                &:hover{
+                    background-color: darken($buttonColor, 45);
+                    border-color: darken($buttonColor, 45);
+                }
+            }
+        }
+        &--danger{
+            &.is-plain{
+                color: #F56C6C;
+                background: #fef0f0;
+            }
+        }
+        &--text{
+            margin: 0 .25rem;
+            color: lighten($grayColor, 30);
+            background-color: transparent;
+            border-color: transparent;
+            &:hover{
+                color: lighten($grayColor, 35);
+                background: transparent;
+            }
+            &.el-button--medium{
+                font-size: 1.5rem;
+                padding: 0.25rem 0.5rem;
+            }
+            &.circle{
+                color: $borderColor;
+                border-radius: 50%;
+                &:hover{
+                    background: rgba($borderColor, 0.2);
+                }
+            }
+            &.main{
+                font-size: 0.8rem;
+                color: $lightTextColor;
+                &:hover{
+                    color: lighten($lightTextColor, 10);
+                }
+            }
+            &.primary{
+                color:  darken($PrimaryColor, 2.5);
+                &:hover{
+                    color: lighten($PrimaryColor, 3);
+                }
+            }
+            &.cancel{
+                min-width: 4rem;
+                background-color: transparent;
+                border-color: transparent;
+                &:hover{
+                    color:lighten($lightTextColor, 10);
+                    background-color: transparent;
+                }
+                &:active{
+                    color:$lightTextColor;
+                }
+                &.left{
+                    position: absolute;
+                    left: 1.5rem;
+                }
+            }
+            // &.create{
+            //     font-size: 1.5rem;
+            //     padding: .25rem;
+            //     color: $PrimaryColor;
+            //     &:hover{
+            //         color: lighten($PrimaryColor, 5);
+            //     }
+            // }
+        }
+    }
+    .dialog-footer{
+        &.spaceBetween{
+            @extend %spaceBetween;
+        }
+    }
+    .el-table{
+        width: 100%;
+        color: $borderColor;
+        background: transparent;
+        &::before,
+        &__fixed::before,
+        &__fixed-right::before{
+            background-color: darken($blackColor, 2.5);
+        }
+        &__body-wrapper{
+            background-color: lighten($blackColor, 2.5);
+            @include scrollbar_style;
+        }
+        &__expanded-cell,
+        &__expanded-cell:hover{
+            background-color: lighten($blackColor, 2.5) !important;
+        }
+        &--enable-row-hover{
+            .el-table__body{
+                tr:hover>td{
+                    background-color: $blackColor;
+                }
+            }
+        }
+        &__fixed-right-patch{
+            width: 0.5rem !important;
+            background-color: darken($blackColor, 3);
+            border-bottom-color: darken($blackColor, 3);
+        }
+        &__fixed-right{
+            right: 0.5rem !important;
+        }
+        thead tr{
+            background-color: darken($blackColor, 1.5);
+        }
+        th{
+            padding: .25rem 0;
+            &.is-leaf{
+                background-color: darken($blackColor, 3);
+                border-bottom-color: darken($blackColor, 3);
+                &.is-sortable .cell{
+                    white-space:nowrap;
+                    min-width: 6rem;
+                }
+            }
+            &.gutter{
+                width: 8px !important;
+                background-color: $blackColor;
+            }
+        }
+        tr{
+            background-color: lighten($blackColor, 1.5);
+            &.hover-row > td{
+                background-color: lighten($blackColor, 3);
+            }
+        }
+        td{
+            border-bottom-color: $blackColor;
+            &.is-hidden{
+                background-color: lighten($blackColor, 1.5);
+            }
+            &.gutter{
+                width: 8px !important;
+            }
+        }
+        .cell{
+            .el-button+.el-button{
+                margin-left: 0.25rem;
+            }
+        }
+        .ascending .sort-caret.ascending{
+            border-bottom-color: $buttonColor;
+        }
+        .descending .sort-caret.descending {
+            border-top-color: $buttonColor;
+        }
+        .el-button{
+            color:  darken($PrimaryColor, 2.5);
+            &:hover{
+                color: lighten($PrimaryColor, 3);
+            }   
+        }
+    }
+    .el-pagination{
+        &__total{
+            color: $mainBorderColor;
+        }
+        button.btn-prev,
+        button.btn-next{
+            background-color: transparent;
+            color: $darkTextColor;
+            font-weight: bold;
+            &:disabled{
+                opacity: 0.3;
+            }
+        }
+        .el-pager{
+            li{
+                background-color: transparent;
+                color: darken($darkTextColor, 10);
+                &.active{
+                    color: $borderColor;
+                }  
+            }
+        }
+    }
+    .btnBox{
+        &.center{
+            text-align: center;
+        }
+        &.right{
+            text-align: right;
+        }
+        &.table{
+            border-bottom: 1px solid $mainBorderColor;
+            .el-button--text{
+                font-size: 1rem;
+                margin: .5rem;
+                color: darken($buttonColor, 5) !important;
+                &:hover{
+                    color: $buttonColor !important;
+                }
+            }
+        }
+    }
+    .el-card{
+        border: none;
+        color: $whiteColor;
+        background-color: $mainCardBackgroundColor;
+        button i{
+            color: $whiteColor;
+        }
+    }
+    .el-switch{
+        &__core{
+            border-color: lighten($blackColor, 15);
+            background-color: lighten($blackColor, 15);         
+            height: 16px;   
+            &:after{
+                width: 12px;
+                height: 12px;
+            }
+        }
+        &__label{
+            font-weight: normal;
+            font-size: .5rem;
+            &.is-active{
+               color: $buttonColor;
+            }
+        }
+        &.is-checked{
+            .el-switch__core::after {
+                margin-left: -14px;
+            }
+        }
+    }
+    .el-timeline-item__content{
+        color: $whiteColor;
+    }
+    .el-link,
+    .el-dropdown{
+        font-weight: 500;
+        color: lighten($grayColor, 30);
+    }
+    .el-link{
+        &.el-link--default{
+            color: lighten($mainBorderColor, 15);
+            &:hover{
+                color: lighten($mainBorderColor, 25);
+            }
+        }
+    }
+}
+.el-dropdown-menu{
+    .el-dropdown-menu__item{
+        color: darken($whiteColor, 15);
+        &:focus,
+        &:not(.is-disabled):hover{
+            background-color: transparent;
+            color: darken($whiteColor, 5);
+        }
+        &.is-disabled{
+            opacity: 0.5;
+        }
+        &.divided{
+            &.top{
+                border-top: 2px solid lighten($mainCardBackgroundColor, 10);
+            }
+        }
+    }
+}
+.el-tag{
+    &--dark{
+        color: $borderColor;
+        border-color: $buttonColor;
+    }
+    &.btn{
+        cursor: pointer;
+        border-radius: 1rem;
+        margin: 0 0.25rem;
+        padding: 0 1rem;
+        height: 1.5rem;
+        line-height: 1.5rem;
+        background:transparent;
+        border-color:darken($buttonColor, 15);
+        color:darken($whiteColor, 40);
+        &:hover{
+            border-color:$buttonColor;
+        }
+        &.active{
+            color:darken($whiteColor, 10);
+            background: rgba($whiteColor, 0.1);
+        }
+    }
+    &.purple{
+        border-color:darken($darkTextColor, 10);
+    }
+}

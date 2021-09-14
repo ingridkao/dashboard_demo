@@ -1,0 +1,38 @@
+%ellipsis {
+    display: inline-block;
+    vertical-align: middle;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: inherit;
+    line-height: inherit;  
+}
+
+%spaceBetween {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+%spaceAround {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+}
+
+%flexStart{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+%shadow{
+    box-shadow: 3px 3px 10px 2px rgb(0, 0, 0, 0.3);
+}
+$appContainerHeaderHeight : 4.5rem;
+$appContainerHeaderPadding : .75rem;
+
+$cardHeaderHeight : 2rem;

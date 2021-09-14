@@ -1,0 +1,29 @@
+$taipeiPassColor: #03b2c3;
+
+$PrimaryColor: #6ca4b0;
+$buttonColor: #81c1cd;
+$activeColor: #76afba;
+$alarmColor: #913930;
+$hoverColor: #66b1ff;
+$finishColor: #3b8d68;
+$stepColor: #3b5f8d;
+
+$hazardousColor: #A25FAD;
+$unhealthyColor: #D45979;
+$moderateColor: #fc9f0b;
+$goodColor: #4DA378;
+
+$whiteColor: #efeff0;
+$blackColor: #151a1d;
+$grayColor: #3c3d3f;
+
+$darkTextColor: #777ea9;
+$lightTextColor: #3b4a8d;
+
+$mainBackgroundColor: darken($blackColor, 3);
+$mainBorderColor: lighten($blackColor, 30);
+$mainCardBackgroundColor: lighten($blackColor, 1);
+
+$borderColor: darken($whiteColor, 20);
+$lightBackgroundColor: $whiteColor;
+$lightCardBackgroundColor: lighten($whiteColor, 30);

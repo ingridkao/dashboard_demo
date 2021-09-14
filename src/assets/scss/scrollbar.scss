@@ -1,0 +1,29 @@
+@import "./_color";
+
+$baseColor: lighten($grayColor, 30);
+@mixin scrollbar_style {
+    scrollbar-face-color: lighten($baseColor, 25);
+    scrollbar-track-color: $baseColor;
+    scrollbar-arrow-color: lighten($baseColor, 35);
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+        width: 0.5rem;
+        height: 0.5rem;
+    }
+    &::-webkit-scrollbar-thumb {
+        cursor: pointer;
+        border-radius: 0.25rem;
+        background: rgba($baseColor,0.4);
+        &:hover{
+            background: rgba($baseColor,0.8);
+        }
+    }
+    &::-webkit-scrollbar-track {
+        border-radius: 0.25rem;
+        background: rgba($baseColor,0.03);
+    }
+    &::-webkit-scrollbar-corner{
+        background: transparent;
+    }
+}

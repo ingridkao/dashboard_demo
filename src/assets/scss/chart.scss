@@ -1,0 +1,143 @@
+@import "./basic";
+@import "./scrollbar";
+@import "_color";
+.alarmBarContent{
+    @include scrollbar_style;
+    overflow-y: scroll;
+    > div{
+        @extend %spaceBetween;
+        span{
+            font-size: 1rem;
+            line-height: 1.75;
+        }
+        .value{
+            font-weight: bold;
+            &.alarm{
+                color: transparent;
+            }
+        }
+        .ellipsis{
+            flex: 0 0 8em;
+            &.datasets{
+                flex: 0 0 10em;
+            }
+        }
+        .countProgress{
+            position: relative;
+            flex: 1 0 30%;
+            width: 100%;
+            height: .3rem;
+            margin: 0 .3rem;
+            div{
+                position: absolute;
+                height: 100%;
+                border-radius: .3rem;
+                &.hasZScore{
+                    filter: brightness(1);
+                }
+                &.ZScoreProgress.red{
+                    // filter: brightness(0.3);
+                    background: #000;
+                }
+                // &.ZScoreProgress.yellow{
+                //     filter: brightness(0.4);
+                // }
+            }
+        }
+        .complexValue{
+            padding: 0 .5rem;
+            min-width: 2em;
+            text-align: right;
+            color: #ddd;
+        }
+        .seesaw{
+            width: 4em;
+            padding: 0 .5rem;
+            span{
+                width: 3rem;
+                display: inline-block;
+                text-align: right;
+            }
+        }
+    }
+}
+
+.pieContainer{
+    @extend %spaceBetween;
+    margin-bottom: 1rem;
+    height: 9rem;
+    .chartBox{
+        width: 8em;
+        height: 100%;
+        margin: 0 .5rem;
+    }
+    >div{
+        height: 100%;
+    }
+    .lagendContainer{
+        width: calc(100% - 9em);
+        .nodata{
+            text-align: center;
+            margin: 30% auto;
+        }
+        h6{
+            font-size: 0.8rem;
+            margin-top: -0.5rem;
+        }
+        .lagendContent{
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 .5rem 0 1rem;
+            width: 100%;
+            height: 8.5rem;
+
+            &> div{
+                @extend %spaceBetween;
+                > div{
+                    font-size: 1rem;
+                    >span{
+                        display: inline-block;
+                        vertical-align: middle;
+                    }
+                    &.legend{
+                        flex: 0 0 calc(100% - 8.5rem);
+                        max-width: calc(100% - 8.5rem);
+                        white-space: nowrap;
+                        text-align: left;
+                        .icon{
+                            margin-right: 0.25rem;
+                            width: 0.8rem;
+                            height: 0.8rem;
+                            border-radius: 0.8rem;
+                            background: $whiteColor;
+                        }
+                        .ellipsis{
+                            min-width: 4rem;
+                            max-width: 100%;
+                        }
+                    }
+                    &.value{
+                        white-space: nowrap;
+                        > span{
+                            padding-left: .25rem;
+                            text-align: right;
+                            width: 4rem;
+                            &:first-child{
+                                font-weight: bold;
+                            }
+                        }
+                    }
+                }
+            }
+            &.scroll{
+                @include scrollbar_style;
+                overflow-y: scroll;
+                justify-content: initial;
+            }
+        }
+    }
+    &.countPieContainer{
+        margin-bottom: 1em;
+    }
+}
