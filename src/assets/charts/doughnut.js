@@ -49,10 +49,6 @@ export default {
     methods: {
         renderLineChart() {
             let chartData = this.chartData
-            // let previouTotle = 0
-            // if(chartData.datasets[0]['previou'] && chartData.datasets[0]['previou'].length > 0){
-            //     previouTotle = chartData.datasets[0]['previou'].reduce((a,b)=>a+b)
-            // }
             if(chartData && Object.keys(chartData).length > 0){
             }else{
                 chartData = {
@@ -87,16 +83,16 @@ export default {
                 ctx.textBaseline = "middle"
                 ctx.fillStyle = "#ddd"
                 textX1 = Math.round((width - ctx.measureText(titleLebel).width) / 2)
-                textY1 = middleHeight - fontsoze1*1.1
+                textY1 = middleHeight - fontsoze1*1.75
                 if(this.lastValueTotal !== ''){
                     textY1 = middleHeight - fontsoze1*2
                 }
                 ctx.fillText(titleLebel, textX1, textY1.toFixed(2))
 
-                if(this.chartMark.length<4){
-                    fontsoze2 = width/5
+                if(this.chartMark.length<=5){
+                    fontsoze2 = width/6
                 }else{
-                    fontsoze2 = (width/2)/this.chartMark.length
+                    fontsoze2 = (width/this.chartMark.length)*1.1
                 }
                 ctx.font =  fontsoze2.toFixed() + "px sans-serif"
                 ctx.textBaseline = "middle"
@@ -105,7 +101,7 @@ export default {
                 const textX2 = Math.round((width - ctx.measureText(this.chartMark).width) / 2)
                 let height2 = middleHeight - fontsoze2/4
                 if(fontsoze1){
-                    height2 = middleHeight + fontsoze1
+                    height2 = middleHeight + fontsoze1*0.5
                 }
                 if(this.lastValueTotal !== ''){
                     height2 = middleHeight
@@ -122,7 +118,7 @@ export default {
                     ctx.textBaseline = "middle"
                     ctx.fillStyle = "#ddd"
                     const textX3 = Math.round((width - ctx.measureText(this.lastValueTotal).width) / 2)
-                    const textY13 = middleHeight + fontsoze3*2.5
+                    const textY13 = middleHeight + fontsoze3*2.25
                     ctx.fillText(this.lastValueTotal, textX3, textY13.toFixed(2))
                 }
                 ctx.save()

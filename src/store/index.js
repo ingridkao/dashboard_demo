@@ -3,12 +3,14 @@ import Vuex from 'vuex'
 import i18n from '@/i18n'
 import axios from 'axios'
 
+import {topicList} from '../assets/datas/topicList.js'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
         langObj : i18n.messages[i18n.locale],
         darkMode: localStorage.getItem('darkMode') || 'dark',
+        activedTopic: topicList[0],        
         authTopicListArray: [],
         topicDefaultObj: {},
         topicCustomizedArray: [],
@@ -35,30 +37,13 @@ export default new Vuex.Store({
             state.darkMode = string
             localStorage.setItem('darkMode', string)
         },
-        updateAuthTopicData(state, topicData) {
-            state.authTopicListArray = []
-            state.topicDefaultObj = []
-            state.topicCustomizedArray = []
-            state.topicFixedArray = []
-
-            if(topicData && topicData.length > 0 ){
-                state.authTopicListArray = topicData
-                topicData.map(item => {
-                    if(item.type === 'customized'){
-                        if(item.index === 'defaultFav'){
-                            state.topicDefaultObj = item
-                        }else{
-                            state.topicCustomizedArray.push(item)
-                        }
-                    }else{
-                        state.topicFixedArray.push(item)
-                    }
-                })
-            }
+        updateActivedTopic(state, obj){
+            state.activedTopic = obj
         },
         updateTopicContent(state, payload) {
             state.topicToggleDataset = (payload && payload.length > 0)? payload: []
         },
+
         updateHistoryLineData(state, payload){
             state.historyLineData = []
             if(payload && payload.length > 0){
@@ -236,24 +221,6 @@ export default new Vuex.Store({
                 // }).catch(e => {
                 //     commit('setAllComponents', null)
                 //     reject(e)
-                // }).finally(r => {
-                //     commit('setGlobalLoading', false)
-                // })
-            })
-        },
-        fetchTopicData({ dispatch, commit }) {
-            return new Promise((resolve, reject) => {
-                // commit('setGlobalLoading', true)
-                // axios.get(`/api_server/manager/topic/all`).then(rs => {
-                //     commit('updateAuthTopicData', (rs && rs.data)? rs.data.data: null)
-                //     resolve(rs.data)
-                // }).catch(error => {
-                //     if(error && error.response.status === 401){
-                //             dispatch('fetchTopicData', { dispatch, commit })
-                //     }else{
-                //         commit('updateAuthTopicData', null)
-                //         reject(error)
-                //     }
                 // }).finally(r => {
                 //     commit('setGlobalLoading', false)
                 // })

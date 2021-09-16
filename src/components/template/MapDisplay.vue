@@ -32,7 +32,7 @@
                             :class="translateSymbol(contentItem.symbol)" 
                             :style="translateColor(contentItem, subData.color, contentIndex)"
                         />
-                        <span>{{ (contentItem.name)? contentItem.name: (Object.keys(mapLabelValueList)[contentIndex]? Object.keys(mapLabelValueList)[contentIndex]: contentItem.select_array) }}</span>
+                        <span>{{ (contentItem.select_array)? contentItem.select_array: (Object.keys(mapLabelValueList)[contentIndex]? Object.keys(mapLabelValueList)[contentIndex]: contentItem.select_array) }}</span>
                     </div>
                     <div v-if="Object.keys(mapLabelValueList).length > 0">
                         {{translateDecimalComma((contentItem.name)? contentItem.name: (Object.keys(mapLabelValueList)[contentIndex]? Object.keys(mapLabelValueList)[contentIndex]: contentItem.select_array))}}
@@ -244,7 +244,7 @@ export default {
 </script>
 <style lang="scss">
 @import "~@/assets/scss/basic.scss";
-.mapDisplayContainer{
+#dashboardContainer .mapDisplayContainer{
     min-height: 9.5rem;
 }
 .calculationMsg{

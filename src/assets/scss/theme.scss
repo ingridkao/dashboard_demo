@@ -2,15 +2,21 @@
 
 #appContainer{
     &[data-theme=dark]{
-        background-color: $mainBackgroundColor;
+        background-color: darken($blackColor, 3);
         color: $whiteColor;
+        .el-container{
+            background-color: darken($blackColor, 2);
+        }
+        .el-divider{
+            background-color: lighten($blackColor, 10);
+        }
         h5, h6, b, .ellipsis, .subFontStyle{
             color: darken($whiteColor, 30);
         }
         #dashboardContainer .boxCardInfo h2{
             color: darken($whiteColor, 20);
         }
-        h2{
+        h3, h2{
             color: $whiteColor;
         }
         .unit, .seesaw{
@@ -23,9 +29,6 @@
             span{
                 color: $whiteColor;
             }
-        }
-        #darkModeSwitch{
-            background-color: $lightBackgroundColor;
         }
         .disabledBlock{
             background-color: rgba($mainCardBackgroundColor, 0.8)
@@ -52,7 +55,7 @@
                     color: darken($whiteColor, 10);
                 }
                 &:last-child{
-                    color: lighten(darken($whiteColor, 10), 10);
+                    color: $whiteColor;
                 }
             }
         }
@@ -62,15 +65,22 @@
         }
     }
     &[data-theme=light] {
-        background-color: $lightBackgroundColor;
+        background-color: $whiteColor;
         color: $grayColor;
+        .el-container{
+            background-color: darken($whiteColor, 2);
+        }
+        .el-divider{
+            background-color: lighten($whiteColor, 10);
+        }
+
         h5, h6, b, .ellipsis, .subFontStyle{
             color: darken($grayColor, 30);
         }
         #dashboardContainer .boxCardInfo h2{
             color: darken($grayColor, 20);
         }
-        h2, .el-link, .el-dropdown{
+        h3, h2, .el-link, .el-dropdown{
             color: $grayColor;
         }
         .unit, .seesaw{
@@ -86,11 +96,12 @@
                 color: $blackColor;
             }
         }
-        #darkModeSwitch{
-            background-color: $mainBackgroundColor;
-        }
         .disabledBlock{
             background-color: rgba($whiteColor, 0.5)
+        }
+        .componentBox{
+            color: darken($whiteColor, 30);
+            background-color: $lightBackgroundColor;
         }
     }
     .componentBox{

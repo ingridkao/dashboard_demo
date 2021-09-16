@@ -3,11 +3,7 @@
 @import "./scrollbar";
 
 body{
-    .el-container{
-        background-color: darken($blackColor, 2);
-    }
     .el-divider{
-        background-color: lighten($blackColor, 10);
         margin: 1rem 0;
     }
     .el-form{

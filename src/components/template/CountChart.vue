@@ -225,7 +225,8 @@ export default {
                 }
             }
             if(valueArray.length > 0){
-                chartMarkValue = valueArray.reduce((a,b)=>a+b)
+                chartMarkValue = valueArray.reduce((a,b)=>parseFloat(a)+b)
+                chartMarkValue = toFixedFunction(chartMarkValue)
             }
             if(Object.keys(this.pieValueDataObj).length > 0){
                 this.pieData = {

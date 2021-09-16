@@ -108,14 +108,16 @@ export default {
             if(promisesArray && promisesArray.length > 0){
                 const componentDatas = await promisesArray[this.componentIndex]
                 if(componentDatas){
-                    if(this.view === 'dashboard'){
+                    // if(this.view === 'dashboard'){
                         const themeDatas = await componentDatas[this.themeDatasetIndex]
                         this.clearUpData(await themeDatas)
-                    }else{
-                        componentDatas[this.themeDatasetIndex].then(dataset => {
-                            this.clearUpData(dataset)
-                        })
-                    }
+                    // }else{
+                    //     console.log(componentDatas);
+
+                    //     componentDatas[this.themeDatasetIndex].then(dataset => {
+                    //         this.clearUpData(dataset)
+                    //     })
+                    // }
                 }
             }else if(typeof promisesArray === 'object'){
                 this.clearUpData(promisesArray)

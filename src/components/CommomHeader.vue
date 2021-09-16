@@ -42,7 +42,7 @@ export default {
         },
         translateTime(){
             if(dayjs(this.lastTime).isValid()){
-                return dayjs(this.lastTime).format('YYYY-MM-DD HH:mm')
+                return dayjs(this.lastTime).format('YYYY-MM-DD')
             }else if(this.subData.sample_data && this.subData.sample_data !== ""){
                 return (this.subData.sample_data === '樣本數據') ? '樣本數據': dayjs(this.subData.sample_data).format('YYYY-MM-DD')
             }else if(this.subData.update_loop){
@@ -59,57 +59,24 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import "~@/assets/scss/basic.scss";
 @import '@/assets/scss/_color.scss';
     .boxCardInfo{
         &.content{
+            @extend %spaceBetween;
+            margin-bottom: 1rem;
             h3{
                 font-size: 1.1rem;
-                color: $whiteColor;
             }
             .desc{
                 display: inline-block;
-                color: darken($borderColor, 45);
                 font-size: 0.1rem;
-                &.dashboardComponentTitle{
-                    .groupName{
-                        display: inline-block;
-                        border-bottom: 1px solid transparent; 
-                        margin-right: 1rem;
-                        color: darken($borderColor, 15);
-                    }
-                }
                 .translateTime{
                     margin-right: 0.25rem;
                 }
             }
         }
-        &.dashboard,
-        &.mgn,{
-            position: relative;
-            margin-bottom: 1rem;
-            .desc{
-                position: absolute;
-                right: 0;
-            }
-        }
     }
-    #dashboardContainer{
-        .desc{
-            top: -1rem;
-        }
-    }
-    #componentCreateContainer{
-        .desc{
-            top: .5rem;
-        }
-    }
-    // #overviewContainer{
-    //     .boxCardInfo.content{
-    //         position: absolute;
-    //         top: .45rem;
-    //         width: calc(100% - 3.5rem);
-    //     }
-    // }
     #mapAside{
         .boxCardInfo.content{
             position: absolute;

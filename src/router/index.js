@@ -19,11 +19,6 @@ const userRouter = [
 		component: Dashboard
 	},
 	{
-		path: '/Dashboard',
-		name: 'Dashboard',
-		component: Dashboard
-	},
-	{
 		path: '/MapView',
 		name: 'MapView',
 		component: MapView

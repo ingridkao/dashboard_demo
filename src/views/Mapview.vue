@@ -1,70 +1,81 @@
 <template>
     <el-container id="mapViewContainer">
         <MapAside 
-            :groups-display="targetTopicGroups"
+            :groups-display="displayGroup"
         />
-        <MapboxContainer 
+        <!-- <MapboxContainer 
             :history-chart-index="historyChartIndex"
-        />
-        <HistoryChart/>
+        /> -->
+        <!-- <HistoryChart/> -->
     </el-container>
 </template>
 <script>
 import { cloneDeep } from 'lodash'
+import { mapState } from 'vuex'
 
+import { topicComponentList, topicContent } from '@/assets/datas/topicList.js'
 import MapAside from '@/components/mapview/MapAside'
 import MapboxContainer from '@/components/mapview/MapContainer'
 import HistoryChart from '@/components/mapview/HistoryChart'
-
-import { FetchTagetAllList } from '@/assets/js/api_get'
 
 export default {
     components: { MapAside, MapboxContainer, HistoryChart },
     data(){
         return {
-            targetTopicData: {},
-            targetTopicGroups : [],
+            displayComponent: [],
+            displayGroup: [],
+
             historyChartIndex: [],
         }
     },
     created() {
         this.initData()
     },
+    computed: {...mapState(['activedTopic'])},
+    watch: {
+        activedTopic: {
+            deep: true,
+            immediate: false,
+            handler: function(newObj, oldObj){
+                this.initData()
+            }
+        }
+    },
     methods: {
         initData(){
-            const {id, type, componentid} = this.$route.query
-            if(id && type){
-                // FetchTagetAllList(`/api_server/manager/topcomp/${type}/${id}`, this).then(success => {
-                //     const targetTopicData = cloneDeep(success)
-                //     const historyMapIndex = []
-                //     const topicToggleData = []
-                //     this.targetTopicGroups = (type === 'fixed')? success.groups: []
+            if(!this.activedTopic || Object.keys(this.activedTopic).length === 0) return
+            const displayTopic = topicComponentList.find(topic => topic.index === this.activedTopic.index)
+            const {componentindex} = this.$route.query
 
-                //     if(targetTopicData.components && targetTopicData.components.length > 0){
-                //         targetTopicData.components.map(dataset => {
-                //             topicToggleData.push({
-                //                 ...dataset,
-                //                 dataToggle: (dataset.id == componentid)
-                //             })
-                //             if(dataset.calculation_config){
-                //                 this.historyChartIndex.push(dataset.index)
-                //             }
-                //             if(dataset.map_config && dataset.map_config.length > 0){
-                //                 dataset.map_config.map(data => {
-                //                     const dataItemConfig = data.raster? data.raster: data.geoJson
-                //                     if(dataset.calculation_config){
-                //                         historyMapIndex.push(dataItemConfig.index)
-                //                     }
-                //                 })
-                //             }
-                //         })
-                //     }
-                //     this.$store.commit('updateHistoryLineData', historyMapIndex)
-                //     this.$store.commit('updateTopicContent', topicToggleData)
-                // }).catch(e => {
-                //     console.log(e)
-                // })
+            
+            this.displayComponent = []
+            if(displayTopic && displayTopic.components){
+                this.displayComponent = displayTopic.components
+                this.displayGroup = displayTopic.groups
             }
+            const topicToggleData = []
+            if(componentindex && this.displayComponent && this.displayComponent.length > 0){
+                const historyMapIndex = []
+                this.displayComponent.map(dataset => {
+                    topicToggleData.push({
+                        ...dataset,
+                        dataToggle: (dataset.index == componentindex)
+                    })
+                    // if(dataset.calculation_config){
+                    //     this.historyChartIndex.push(dataset.index)
+                    // }
+                    if(dataset.map_config && dataset.map_config.length > 0){
+                        dataset.map_config.map(data => {
+                            const dataItemConfig = data.raster? data.raster: data.geoJson
+                            if(dataset.calculation_config){
+                                historyMapIndex.push(dataItemConfig.index)
+                            }
+                        })
+                    }
+                })
+            }
+            this.$store.commit('updateTopicContent', topicToggleData)
+                //     this.$store.commit('updateHistoryLineData', historyMapIndex)
         }
     }
 }

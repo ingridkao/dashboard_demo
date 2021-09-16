@@ -1,20 +1,17 @@
 <template>
     <el-aside id="mapAside" width="27rem" class="cardContainer">
-        <div v-for="(groupName, groupIndex) in targetTopicGroup" :key="groupIndex" class="groupContainer">
-            <div v-if="groupName.length > 0" class="groupItem">
+        <div v-for="(groupItem, groupIndex) in targetTopicToGroup" :key="groupIndex" class="groupContainer">
+            <div v-if="groupItem.length > 0" class="groupItem">
                 <h6>
                     <div>{{groupIndex}}</div>
-                    <el-button 
-                        type="text"
-                        @click="toggleGroupComponent(groupIndex)"
-                    >
+                    <el-button type="text" @click="toggleGroupComponent(groupIndex)">
                         <i :class="groupsButton[groupIndex]? 'el-icon-caret-top': 'el-icon-caret-bottom'"/>
                     </el-button>
                 </h6>
                 <el-card 
                     shadow="hover" 
                     class="boxCard" 
-                    v-for="(componentItem, componentIndex) in groupName" 
+                    v-for="(componentItem, componentIndex) in groupItem" 
                     :key="componentIndex" 
                     :body-style="{height: (componentItem && componentItem.dataToggle)? 'calc(100% - 2rem)': 0}" 
                 >
@@ -50,22 +47,23 @@
     </el-aside>
 </template>
 <script>
-import { cloneDeep } from 'lodash'
-import { topiclContent } from '@/assets/datas/overview.js'
 import { mapState } from 'vuex'
+import { cloneDeep } from 'lodash'
+
+import { topicContent } from '@/assets/datas/topicList.js'
+
 
 export default {
     data(){
         return {
-            topicDiffArray: [],
-            topicCacheArray: [],
-
-            targetTopicGroup: {},
+            targetTopicToGroup: {},
             groupsButton: {},
+
+            targetDiffArray: [],
+            targetCacheArray: [],
+
             initPromiseArr: [],
-            promise: null,
-            intervalObj: {},
-            groupsNewDisplay: []
+            promise: null
         }
     },
     props: {
@@ -75,176 +73,88 @@ export default {
         }
     },
     computed: {
-        ...mapState(['topicToggleDataset', 'topicFixedArray']),
-        fixedTopic(){
-            const {type} = this.$route.query
-            const fixedBoolen = type && type === 'fixed'
-            if(fixedBoolen){
-                this.groupsNewDisplay = this.groupsDisplay
-            }
-            return fixedBoolen
-        }
+        ...mapState(['topicToggleDataset', 'activedTopic', 'topicFixedArray'])
     },
     watch: {
         topicToggleDataset: {
             deep: true,
             immediate: true,
             handler: function(newArray, oldArray){
-                if(oldArray && oldArray.length > 0){
-                    this.checkDiff()
-                }else{
-                    this.$store.dispatch('fetchTopicData').then(e=>{
-                        this.checkDiff(true)
-                    })
-                }
+                this.checkDiff(!oldArray || oldArray.length === 0)
             }
         }
     },
-    destroyed() {
-        this.clearIntervalFunction()
-    },
+    destroyed() {},
     methods: {
-        clearIntervalFunction(){
-            const values = Object.values(this.intervalObj)
-            if(values.length > 0){
-                values.map(intervalInstance => {
-                    clearInterval(intervalInstance)
-                })
-                this.intervalObj = {}
-            }
-        },
         checkDiff(init){
-            this.clearIntervalFunction()
-            this.targetTopicGroup = {}
-            this.topicDiffArray = this.topicToggleDataset.map((newItem, newIndex) => {
+            this.targetDiffArray = this.topicToggleDataset.map((newItem, newIndex) => {
                 if(init){
                     return newItem['dataToggle']
                 }else{
-                    return newItem['dataToggle'] && newItem['dataToggle'] != this.topicCacheArray[newIndex]
+                    return newItem['dataToggle'] && newItem['dataToggle'] != this.targetCacheArray[newIndex]
                 }
             })
-            this.topicCacheArray = cloneDeep(this.topicDiffArray)
-            this.processGroup(init)
+            this.targetCacheArray = cloneDeep(this.targetDiffArray)
+            this.processGroup()
         },
-        processGroup(init){
+        processGroup(){
+            this.targetTopicToGroup = {}
+            this.initPromiseArr = []
             this.topicToggleDataset.map((element, elementIndex)  => {
-                if(init){
-                    this.groupsButton = {
-                        ...this.groupsButton,
-                        [groupName]: element.dataToggle
-                    }
-                }
-
                 //1) Check group 
-                let groupName = null
-                if(this.fixedTopic){
-                    if(typeof element.group_index === "number"){
-                        groupName = this.groupsDisplay[element.group_index]
-                    }else{
-                        groupName = '不分類'
-                    }
-                }else{
-                    const targetTopic = this.topicFixedArray.find(item=> item.id === element.topic_id)
-                    groupName = (targetTopic)? targetTopic.name: element.topic_id
-                    this.groupsNewDisplay.push(groupName)
-                }
-
+                const groupName = (typeof element.group_index === "number")? this.groupsDisplay[element.group_index]: '不分類'
                 element.group_name = groupName
                 element.promiseIndex = elementIndex
-
-                if(typeof this.targetTopicGroup[groupName] === 'undefined'){
-                    this.targetTopicGroup[groupName] = [element]
+                if(typeof this.targetTopicToGroup[groupName] === 'undefined'){
+                    this.targetTopicToGroup[groupName] = [element]
                 }else{
-                    this.targetTopicGroup[groupName].push(element)
+                    this.targetTopicToGroup[groupName].push(element)
                 }
-
-                const milliSecond = element.update_loop
-                if(element.dataToggle && milliSecond > 0){
-                    this.intervalObj[element.index] = setInterval(() => {
-                        this.setIntervalFunction(element, elementIndex)
-                    }, milliSecond)
-                }
-                this.initPromiseArr[elementIndex] = this.fetchComponentAPI(element, elementIndex)
+                //2) Fetch data
+                this.initPromiseArr.push(this.fetchComponentAPI(element, elementIndex))
             })
-            // console.log(this.targetTopicGroup);
-            // console.log(this.initPromiseArr);
             this.promise = Promise.all(this.initPromiseArr)
         },
         fetchComponentAPI(componentItem, componentIndex) {
             if(!componentItem) return null
-            if(!this.topicDiffArray[componentIndex] && this.initPromiseArr[componentIndex]){
+
+            if(!this.targetDiffArray[componentIndex] && this.initPromiseArr[componentIndex]){
                 return this.initPromiseArr[componentIndex]
             }
 
-            const componentRequest = componentItem.request_list
-            if(!componentRequest) return null
-            return componentRequest.map(async (requestItem, requestIndex) => {
-                const realContent = await this.fetchRealAPI(requestItem)
-                if(realContent && realContent.data){
-                    return realContent
-                }else if(realContent && !realContent.data){
-                    return null
-                }else if(componentItem){
-                    const targetTopic = this.topicFixedArray.find(item=> componentItem && componentItem.topic_id == item.id)
-                    if(targetTopic && topiclContent[targetTopic.index]){
-                        return topiclContent[targetTopic.index][componentItem.index][requestIndex]
-                    }else{
-                        return null
-                    }
-                }
+            const { index, request_list } = componentItem
+            if(!request_list || !index) return null
+
+            const activedTopicIndex = this.activedTopic.index
+            if(!activedTopicIndex) return null
+
+            return request_list.map(async (requestItem, requestIndex) => {
+                const targetTopic = topicContent[activedTopicIndex]
+                const targetComponent = targetTopic[index]
+                return (targetComponent.length > 0)? (targetComponent[requestIndex]? targetComponent[requestIndex]: null): null
             })
         },
-        setIntervalFunction(dataset){
-            const newPromiseArr = cloneDeep(this.initPromiseArr)
-            // console.log(newPromiseArr);
-            const targetIndex = this.topicToggleDataset.findIndex(componentItem => (componentItem.index === dataset.index))
-            newPromiseArr[targetIndex] = this.fetchComponentAPI(dataset, true)
-            this.promise = Promise.all(newPromiseArr)
-        },
-        fetchRealAPI(themeRequest){
-            if(themeRequest && themeRequest.path){
-                const postURL = `/api_server${themeRequest.path}`
-                const formData = this.$postFormData(themeRequest.form_data)
-                return new Promise(resolve => {
-                    return this.$axios.post(postURL, formData).then(success => {
-                        resolve(success.data)
-                    }).catch(error => {
-                        resolve({
-                            error: (error && error.response.data)? error.response.dataL :error,
-                            data: null
-                        })
-                    })
+        toggleGroupComponent(groupName) {
+            if(this.targetTopicToGroup[groupName] && this.targetTopicToGroup[groupName].length > 0){
+                this.targetTopicToGroup[groupName].map((item, index) => {
+                    this.targetTopicToGroup[groupName][index]['dataToggle'] = !this.groupsButton[groupName]
                 })
-            }else{
-                return new Promise(resolve => {
-                    resolve({
-                        data: null
-                    })
-                })
+            }
+            this.groupsButton = {
+                ...this.groupsButton,
+                [groupName]: !this.groupsButton[groupName]
             }
         },
         toggleComponent(componentItem) {
             if(Object.keys(this.groupsButton).length === 0) return
 
             const targetName = componentItem.group_name
-            if(targetName && this.targetTopicGroup[targetName].length > 0){
+            if(targetName && this.targetTopicToGroup[targetName].length > 0){
                 let btnToggle = false
-                this.targetTopicGroup[targetName].map(item => {
+                this.targetTopicToGroup[targetName].map(item => {
                     btnToggle = item.dataToggle
                 })
                 this.groupsButton[targetName] = btnToggle
-            }
-        },
-        toggleGroupComponent(groupName) {
-            // console.log('toggleGroupComponent');
-            if(this.targetTopicGroup[groupName] && this.targetTopicGroup[groupName].length > 0){
-                this.targetTopicGroup[groupName].map((item, index) => {
-                    this.targetTopicGroup[groupName][index]['dataToggle'] = !this.groupsButton[groupName]
-                })
-            }
-            this.groupsButton = {
-                ...this.groupsButton,
-                [groupName]: !this.groupsButton[groupName]
             }
         }
     }

@@ -13,13 +13,10 @@
 <script>
 import { mapState } from 'vuex'
 import AppHeader from '@/components/AppHeader.vue'
-import Dashboard from '@/views/Dashboard.vue'
 
 export default {
-    computed: {
-        ...mapState(['darkMode', 'globalLoading'])
-    },
-    components: { AppHeader, Dashboard }
+    computed: {...mapState(['darkMode', 'globalLoading'])},
+    components: { AppHeader }
 }
 </script>
 <style lang="scss">

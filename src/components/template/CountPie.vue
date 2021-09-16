@@ -208,8 +208,8 @@ export default {
                 })
 
                 //2) Get sum number
-                const datasetValueSum = datasetValues.reduce((a,b)=>a+b)
-                const datasetLastSum = lastDatasets.reduce((a,b)=>a+b)
+                const datasetValueSum = (datasetValues.length > 0)? datasetValues.reduce((a,b)=>a+b): 0
+                const datasetLastSum = (lastDatasets.length > 0)? lastDatasets.reduce((a,b)=>a+b): 0
                 this.chartMark = 0
                 selectKeys.map(item => {
                     this.chartMark += this.pieListValueObj[item]

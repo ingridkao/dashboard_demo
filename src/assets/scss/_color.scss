@@ -25,5 +25,5 @@ $mainBorderColor: lighten($blackColor, 30);
 $mainCardBackgroundColor: lighten($blackColor, 1);
 
 $borderColor: darken($whiteColor, 20);
-$lightBackgroundColor: $whiteColor;
+$lightBackgroundColor: lighten($whiteColor, 5);
 $lightCardBackgroundColor: lighten($whiteColor, 30);
