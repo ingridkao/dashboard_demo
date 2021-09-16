@@ -95,7 +95,7 @@ export const topicComponentList = [
                             paint: {
                                 "circle-color":["match",["get", "案件類型"],"大型廢棄物清運聯繫","#fc9f0b","場所與設施噪音舉發","#dac117","污染舉發","#FDD79B","路燈故障或設施損壞","#FDD79B","#555"]
                             },
-                            property: ["案件編號", "案件類型", "案件狀態", "成案時間", "結案時間", "案件內容"]
+                            property: ["案件編號", "案件類型", "案件狀態", "成案時間", "結案時間", "案件內容", "epoch_time"]
                         }
                     }
                 ]
@@ -390,7 +390,7 @@ export const topicComponentList = [
                             paint: {
                                 'fill-color': [
                                     'match',
-                                    ['get', '壅塞程度'],
+                                    ['get', 'description'],
                                     '壅塞',
                                     '#EC4037',
                                     '車多',
@@ -400,7 +400,7 @@ export const topicComponentList = [
                                     '#ccc'
                                 ]
                             },
-                            property: ['壅塞程度'],
+                            property: ['description'],
                         }
                     }
                 ]
@@ -501,26 +501,20 @@ export const topicComponentList = [
                         raster:{
                             index: 'traffic_accident_location_view',
                             title: '交通事故統計',
-                            symbol: 'heatmap',
-                            heatmap: {
-                                filter:'type',
-                                zoom: 16.5
-                            },
+                            property: ['處理別','位置','時間'],
+                            symbol: 'metro',
                             paint: {
-                                'circle-color': [
+                                'text-halo-color': [
                                     'match',
-                                    ['get', 'type'],
-                                    '1',
-                                    '#CA0020',
-                                    '2',
-                                    '#F8C3AC',
-                                    '3',
-                                    '#D1D1D1',
-                                    '#ccc'
+                                    ['get', 'Countdown'],
+                                    '列車進站',
+                                    '#68ccf8',
+                                    "hsla(240, 0%, 100%, 0)"
                                 ]
-                            },
-                            property: ['處理別','位置','時間']
-                        },
+                            }
+                        }
+
+
                     }
                 ]
             },
@@ -563,10 +557,8 @@ export const topicComponentList = [
                 map_config: [
                     {
                         geoJson: {
-                            index: 'metrostationlive',
+                            index: 'traffic_metro_station',
                             title: '捷運站點',
-                            url: '/traffic/component/metrostationlive',
-                            interval: 15,
                             symbol: 'metro',
                             paint: {
                                 'text-halo-color': [

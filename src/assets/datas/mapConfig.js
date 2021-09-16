@@ -1,3 +1,4 @@
+const buildColor = '#4e4e4e'
 export const buildingsIn3D = {
     id: '3d-buildings',
     source: 'composite',
@@ -33,11 +34,19 @@ export const buildingsIn3D = {
             'case',
             ['boolean', ['feature-state', 'hover'], false],
             '#ff0000',
-            '#ddd'
+            buildColor
         ],
-        'fill-extrusion-height': ["number", ["get", "height"], 5],
-        'fill-extrusion-base': ["number", ["get", "min_height"], 0],
-        'fill-extrusion-opacity': 0.6
+        'fill-extrusion-height': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            1,
+            50,
+            14,
+            ["get", "height"]
+        ],
+        'fill-extrusion-base': ['get', 'min_height'],
+        'fill-extrusion-opacity': 0.8
     }
 }
 
@@ -48,7 +57,7 @@ export const taipeiBuilding = {
     type: 'fill-extrusion',
     minzoom: 14,
     paint: {
-        'fill-extrusion-color': "#171717",
+        'fill-extrusion-color': buildColor,
         //1_bud_high = 屋頂高度1_top_high - 出入口高度1_ent_heig
         // 'fill-extrusion-height': ['get', '1_bud_high'],
         'fill-extrusion-height': [
@@ -280,6 +289,31 @@ export const symbolIconBigStyle = {
         0.2,
         17,
         0.4
+    ],
+    'icon-allow-overlap': true,
+    "text-field": '○',
+    "text-size": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        13.99,
+        8,
+        14,
+        25,
+        17,
+        50
+    ]
+}
+
+export const symbolIconMetroStyle = {
+    'icon-size': [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        12.5,
+        0.1,
+        16,
+        0.3
     ],
     'icon-allow-overlap': true,
     "text-field": '○',

@@ -3,9 +3,9 @@
         <MapAside 
             :groups-display="displayGroup"
         />
-        <!-- <MapboxContainer 
+        <MapboxContainer 
             :history-chart-index="historyChartIndex"
-        /> -->
+        />
         <HistoryChart/>
     </el-container>
 </template>
@@ -47,27 +47,24 @@ export default {
             const displayTopic = topicComponentList.find(topic => topic.index === this.activedTopic.index)
             const {componentindex} = this.$route.query
 
-            
             this.displayComponent = []
             if(displayTopic && displayTopic.components){
                 this.displayComponent = displayTopic.components
                 this.displayGroup = displayTopic.groups
             }
             const topicToggleData = []
+            const historyMapIndex = []
             if(componentindex && this.displayComponent && this.displayComponent.length > 0){
-                const historyMapIndex = []
                 this.displayComponent.map(dataset => {
                     topicToggleData.push({
                         ...dataset,
                         dataToggle: (dataset.index == componentindex)
                     })
-                    if(dataset.calculation_config){
-                        this.historyChartIndex.push(dataset.index)
-                    }
                     if(dataset.map_config && dataset.map_config.length > 0){
                         dataset.map_config.map(data => {
                             const dataItemConfig = data.raster? data.raster: data.geoJson
                             if(dataset.calculation_config){
+                                this.historyChartIndex.push(dataset.index)
                                 historyMapIndex.push(dataItemConfig.index)
                             }
                         })
@@ -75,7 +72,7 @@ export default {
                 })
             }
             this.$store.commit('updateTopicContent', topicToggleData)
-                //     this.$store.commit('updateHistoryLineData', historyMapIndex)
+            this.$store.commit('updateHistoryLineData', historyMapIndex)
         }
     }
 }

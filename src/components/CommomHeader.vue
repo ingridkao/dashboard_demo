@@ -7,8 +7,9 @@
             :style="{maxWidth: ellipsisMaxWidth}">
             <span v-html="translateTime" class="translateTime"/>
             <span v-html="translateFrom" class="translateFrom"/>
-            <span v-if="view === 'mapview' && haveHistory" class="haveHistoryIcon">
-                <i class="el-icon-time"/>
+            <span v-if="view === 'mapview'" class="conditionIcon">
+                <i v-if="haveMap" class="el-icon-location-outline"/>
+                <i v-if="haveHistory" class="el-icon-time"/>
             </span>
         </p>
     </div>
@@ -36,6 +37,9 @@ export default {
         },
         haveHistory(){
             return (this.subData && typeof this.subData.calculation_config && typeof this.subData.calculation_config === 'object')
+        },
+        haveMap(){
+            return (this.subData && this.subData.map_config)
         },
         ellipsisMaxWidth(){
             return (this.subData && this.subData.name)? `${22 - this.subData.name.length}rem`: 'none'
@@ -103,7 +107,7 @@ export default {
         .translateFrom{
             max-width: 9rem;
         }
-        .haveHistoryIcon{
+        .conditionIcon i{
             margin-left: 0.5rem;
         }
     }
