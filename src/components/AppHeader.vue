@@ -21,7 +21,7 @@
         </div>
         <div id="toolBtnArea">
             <el-button type="text" :icon='"el-icon-notebook-2"' @click="drawer = true"/>
-            <el-button type="text" :icon='darkMode? "el-icon-sunny": "el-icon-moon"' @click="toggleColor"/>
+            <el-button type="text" :icon='(darkMode === "light")? "el-icon-sunny": "el-icon-moon"' @click="toggleColor"/>
             <!-- <i class="el-icon-printer"/>  -->
             <!-- <i class="el-icon-more-outline"/> -->
         </div>

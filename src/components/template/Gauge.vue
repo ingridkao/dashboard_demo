@@ -13,6 +13,7 @@
                     :chart-use="contentItem.use"
                     :chart-total="contentItem.total"
                     :title-lebel="titleLebel[i]"
+                    :dark-mode="darkMode"
                 />
             </div>
         </div>
@@ -20,6 +21,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import CommomHeader from '@/components/CommomHeader.vue'
 import GaugeChart from '@/assets/charts/gauge.js'
 
@@ -90,6 +92,7 @@ export default {
         },
     },
     computed:{
+        ...mapState(['darkMode']),
         requestConfig(){
             if(this.targetRequest && this.targetRequest.config){
                 return this.targetRequest.config

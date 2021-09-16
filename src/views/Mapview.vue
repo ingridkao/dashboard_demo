@@ -6,7 +6,7 @@
         <!-- <MapboxContainer 
             :history-chart-index="historyChartIndex"
         /> -->
-        <!-- <HistoryChart/> -->
+        <HistoryChart/>
     </el-container>
 </template>
 <script>
@@ -61,9 +61,9 @@ export default {
                         ...dataset,
                         dataToggle: (dataset.index == componentindex)
                     })
-                    // if(dataset.calculation_config){
-                    //     this.historyChartIndex.push(dataset.index)
-                    // }
+                    if(dataset.calculation_config){
+                        this.historyChartIndex.push(dataset.index)
+                    }
                     if(dataset.map_config && dataset.map_config.length > 0){
                         dataset.map_config.map(data => {
                             const dataItemConfig = data.raster? data.raster: data.geoJson

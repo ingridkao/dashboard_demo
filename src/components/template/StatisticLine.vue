@@ -184,7 +184,7 @@ export default {
                         sum = targetDataSet.value.map((targetDataItem)=> {
                             if(targetIndex === 0){
                                 if(targetItem.x_axes === 'valueTime'){
-                                    let dayjsformat = 'hh:mm'
+                                    let dayjsformat = 'HH:mm'
                                     let dayjsformatUnit = ''
                                     if(targetItem.interval === 'day'){
                                         dayjsformat = 'M/D'

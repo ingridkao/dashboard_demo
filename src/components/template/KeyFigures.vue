@@ -287,7 +287,7 @@ export default {
                     const sum = targetDataSet.value.map((targetDataItem)=> {
                         if(selectIndex === 0){
                             if(this.lineChartConfig.x_axes === 'valueTime'){
-                                let dayjsformat = 'hh:mm'
+                                let dayjsformat = 'HH:mm'
                                 let dayjsformatUnit = ''
                                 if(this.formDataConfig && this.formDataConfig.interval === 'month'){
                                     dayjsformat = 'M'

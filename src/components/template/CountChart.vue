@@ -8,6 +8,7 @@
                 :chart-mark="chartMark"
                 :title-lebel="titleLebel"
                 :last-value-total="lastDataTotalString"
+                :dark-mode="darkMode"
             />
             <div class="lagendContainer">
                 <h6 v-if="targetRequest && targetRequest.name">{{targetRequest.name}}</h6>
@@ -60,6 +61,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import { growthPercentageCommon, spliteName, toFixedFunction } from '@/assets/js/commom.js'
 import { ChartColors } from '@/assets/datas/appConfig.js'
 import DoughnutChart from '@/assets/charts/doughnut.js'
@@ -139,6 +142,7 @@ export default {
         }
     },
     computed:{
+        ...mapState(['darkMode']),
         requestConfig(){
             if(this.targetRequest && this.targetRequest.config){
                 return this.targetRequest.config

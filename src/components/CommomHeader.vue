@@ -7,6 +7,9 @@
             :style="{maxWidth: ellipsisMaxWidth}">
             <span v-html="translateTime" class="translateTime"/>
             <span v-html="translateFrom" class="translateFrom"/>
+            <span v-if="view === 'mapview' && haveHistory" class="haveHistoryIcon">
+                <i class="el-icon-time"/>
+            </span>
         </p>
     </div>
 </template>
@@ -30,6 +33,9 @@ export default {
     computed:{
         subDataName(){
             return (this.subData && this.subData.name)? this.subData.name: '組件名稱'
+        },
+        haveHistory(){
+            return (this.subData && typeof this.subData.calculation_config && typeof this.subData.calculation_config === 'object')
         },
         ellipsisMaxWidth(){
             return (this.subData && this.subData.name)? `${22 - this.subData.name.length}rem`: 'none'
@@ -96,6 +102,9 @@ export default {
         }
         .translateFrom{
             max-width: 9rem;
+        }
+        .haveHistoryIcon{
+            margin-left: 0.5rem;
         }
     }
 </style>

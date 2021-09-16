@@ -1,5 +1,4 @@
 import { Doughnut } from 'vue-chartjs'
-
 export default {
     extends: Doughnut,
     props: {
@@ -18,6 +17,10 @@ export default {
         lastValueTotal: { 
             type: String,
             default: ''
+        },
+        darkMode: { 
+            type: String,
+            default: 'dark'
         }
     },
     data: () => ({
@@ -36,6 +39,12 @@ export default {
     }),
     watch: {
         chartData() {
+            if(this.$data._chart){
+                this.$data._chart.destroy()
+            }
+            this.renderLineChart()
+        },
+        darkMode() {
             if(this.$data._chart){
                 this.$data._chart.destroy()
             }
@@ -81,7 +90,7 @@ export default {
                 }
                 ctx.font = fontsoze1.toFixed() + "px sans-serif"
                 ctx.textBaseline = "middle"
-                ctx.fillStyle = "#ddd"
+                ctx.fillStyle = (this.darkMode === 'dark')? "#999": '#888'
                 textX1 = Math.round((width - ctx.measureText(titleLebel).width) / 2)
                 textY1 = middleHeight - fontsoze1*1.75
                 if(this.lastValueTotal !== ''){
@@ -96,7 +105,7 @@ export default {
                 }
                 ctx.font =  fontsoze2.toFixed() + "px sans-serif"
                 ctx.textBaseline = "middle"
-                ctx.fillStyle = "#fff"
+                ctx.fillStyle = (this.darkMode === 'dark')? "#fff": '#777'
 
                 const textX2 = Math.round((width - ctx.measureText(this.chartMark).width) / 2)
                 let height2 = middleHeight - fontsoze2/4
@@ -116,7 +125,7 @@ export default {
                     }
                     ctx.font =  fontsoze3 + "px sans-serif"
                     ctx.textBaseline = "middle"
-                    ctx.fillStyle = "#ddd"
+                    ctx.fillStyle = (this.darkMode === 'dark')? "#999": '#888'
                     const textX3 = Math.round((width - ctx.measureText(this.lastValueTotal).width) / 2)
                     const textY13 = middleHeight + fontsoze3*2.25
                     ctx.fillText(this.lastValueTotal, textX3, textY13.toFixed(2))

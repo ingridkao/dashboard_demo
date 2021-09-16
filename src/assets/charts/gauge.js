@@ -18,6 +18,10 @@ export default {
         titleLebel: { 
             type: String,
             default: ''
+        },
+        darkMode: { 
+            type: String,
+            default: 'dark'
         }
     },
     data: () => ({
@@ -36,6 +40,12 @@ export default {
     }),
     watch: {
         chartData() {
+            if(this.$data._chart){
+                this.$data._chart.destroy()
+            }
+            this.renderLineChart()
+        },
+        darkMode() {
             if(this.$data._chart){
                 this.$data._chart.destroy()
             }
@@ -66,7 +76,7 @@ export default {
                         fontsize1 = (width/2)/titleLebel.length
                     }
                     ctx.font = fontsize1.toFixed() + "px sans-serif"
-                    ctx.fillStyle = "#ddd"
+                    ctx.fillStyle = (this.darkMode === 'dark')? "#ddd": '#bbbaba'
 
                     const textX1 = Math.round((width - ctx.measureText(titleLebel).width) / 2)
                     const textY1 = middleHeight - fontsize1*1.5
@@ -77,11 +87,11 @@ export default {
                     const textWidth = Math.round(width/2)
                     const textHeight = (titleLebel === '')? middleHeight*0.8: (middleHeight + fontsize1*1.5)
                     ctx.font = fontsoze2.toFixed() + "px sans-serif"
-                    ctx.fillStyle = "#fff"
+                    ctx.fillStyle = (this.darkMode === 'dark')? "#fff": '#999'
                     ctx.fillText(chartUse, Math.round(textWidth - ctx.measureText(chartUse).width), textHeight.toFixed(2))
 
                     ctx.font = fontsoze3.toFixed() + "px sans-serif"
-                    ctx.fillStyle = "#ddd"
+                    ctx.fillStyle = (this.darkMode === 'dark')? "#ddd": '#bbbaba'
                     ctx.fillText(` / ${this.chartTotal}`, textWidth, textHeight.toFixed(2))
 
                     ctx.save()
