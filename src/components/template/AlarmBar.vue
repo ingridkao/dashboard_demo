@@ -232,22 +232,6 @@ export default {
         max-height: calc(100vh - 19rem);
     }
 }
-// #overviewContainer .alarmBarContainer{
-//     h6{
-//         margin: .5rem 0;
-//     }
-//     .indent{
-//         padding-left: 1rem;
-//     }
-//     .alarmBarContent{
-//         @include scrollbar_style;
-//         overflow-y: scroll;
-//         max-height: 50vh;
-
-//         margin-bottom: 1rem;
-//     }
-// }
-
 #mapAside{
     .alarmBarContent > div{
         span{

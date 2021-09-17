@@ -34,6 +34,10 @@ export default {
             type: Boolean,
             default: false
         },
+        darkMode: { 
+            type: String,
+            default: 'dark'
+        }
     },
     data: () => ({
         options: {
@@ -45,6 +49,13 @@ export default {
     }),
     watch: {
         chartDatasets() {
+            if(this.$data._chart){
+                this.$data._chart.destroy()
+            }
+            this.renderLineChart()
+        },
+        darkMode() {
+            console.log(this.darkMode);
             if(this.$data._chart){
                 this.$data._chart.destroy()
             }
@@ -86,7 +97,7 @@ export default {
                         const gradient = canvasRef.getContext('2d').createLinearGradient(0, 0, 0, this.gradientHeight)
                         const rgb = hexAToRGB(this.colorArray[i])
                         gradient.addColorStop(0, `rgba(${rgb},0.8)`)
-                        gradient.addColorStop(1, `rgba(28,28,28,0.3)`)
+                        gradient.addColorStop(1, (this.darkMode === 'dark')? "rgba(28,28,28,0.3)": 'rgba(252,252,252,0.3)')
                         datasets.backgroundColor = gradient
                         datasets.borderWidth = 1
                     }
@@ -112,7 +123,6 @@ export default {
                 }
                 this.options.tooltips['callbacks'] = {
                     label: ((tooltipItems) => {
-                        // console.log(tooltipItems)
                         return `${tooltipItems.value}${this.dataUnit}`
                     })
                 }

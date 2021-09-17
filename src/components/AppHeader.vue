@@ -30,14 +30,15 @@
             title=""
             :visible.sync="drawer"
             :direction="'rtl'"
+            size="25rem"
             :before-close="handleClose">
             <div class="topicContainer">
                 <div class="topicItem" v-for="(topicItem, topicIndex) in topicList" :key="topicIndex" :class="[{active: activedTopic && activedTopic.index === topicItem.index}]" @click="topicPickerUpdate(topicItem)">
-                    <img :src="require(`@/assets/images/thumb/${topicItem.thumbnail}.png`)" :alt="topicItem.name">
-                    <div>
+                    <img :src="require(`@/assets/images/thumb/${topicItem.thumbnail}`)" :alt="topicItem.name">
+                    <!-- <div>
                         <h6>{{topicItem.name}}</h6>
                         <p>{{topicItem.desc}}</p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </el-drawer>
@@ -155,14 +156,20 @@ export default {
             position: relative;
             width: 100%;
             padding: 0 2rem 1rem 2rem;
-            opacity: 0.75;
+            filter:grayscale(1);
             &.active{
-                opacity: 0.9;
+                filter:grayscale(0);
+                img{
+                    border-color: $whiteColor;
+                }
+            }
+            &:hover{
+                filter:brightness(1.5);
             }
             img{
                 width: 100%;
                 height: auto;
-                border: 3px solid $whiteColor;
+                border: 3px solid $blackColor;
             }
             >div{
                 position: absolute;

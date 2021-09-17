@@ -106,11 +106,12 @@ export default {
             })
         },
         routerPushMap(componentItem) {
-            if(componentItem && componentItem.index){
+            if(this.activedTopic && this.activedTopic.index && componentItem && componentItem.index){
                 this.$router.push({
                     name: 'MapView',
                     query: {
-                        componentindex: componentItem.index
+                        topicindex: this.activedTopic.index,
+                        componentindex: componentItem.index,
                     }
                 })
             }
@@ -148,7 +149,6 @@ export default {
             font-size: 1rem;
             opacity: 0.6;
             >span{
-                color: $whiteColor;
                 max-width: 5rem;
                 height: 100%;
                 line-height: 175%;
@@ -160,16 +160,8 @@ export default {
                     height: 75%;
                     line-height: 150%;
                 }
-                &.commonly{}
-                &.customized{}
-                &.fixed {
-                    >span{
-                        // border-bottom: 1px solid darken($grayColor, 5);
-                    }
-                }
                 &.active{
                     opacity: 1;
-                    background-color: rgba($whiteColor, 0.15);
                 }
             }
             &:hover{
@@ -190,34 +182,53 @@ export default {
             .componentHeader{
                 @extend %spaceBetween;
                 margin: 0.25rem 0 0.5rem 0;
-                color: darken($borderColor, 30);
                 font-size: 0.1rem;
                 button{
                     padding: 0;
                 }
             }
         }
-        .boxItemHeader{
-            @extend %spaceBetween;
+    }
+}
+#appContainer[data-theme=dark]{
+    #topicWrapper{
+        button{
+            border-color: $whiteColor;
+            color: $whiteColor;
+            >span{
+                color: $whiteColor;
+            }
+            &.topicBtn{
+                &.active{
+                    background-color: rgba($whiteColor, 0.15);
+                }
+            }
+        }
+    }
+    #dashboardContainer .componentContainer{
+        .componentHeader{
             color: darken($borderColor, 30);
-            .tagBtn{
-                background: transparent;
-                color: darken($borderColor, 30);
-                margin: 0;
-                padding: 0.25rem;
-                &.pin{
-                    color: $borderColor;
+        }
+    }
+}
+#appContainer[data-theme=light]{
+    #topicWrapper{
+        button{
+            border-color: lighten($blackColor, 50);
+            color: $blackColor;
+            >span{
+                color: $blackColor;
+            }
+            &.topicBtn{
+                &.active{
+                    background-color: rgba($PrimaryColor, 0.15);
                 }
             }
-            .groupBtns{
-                button{
-                    padding: 0.25rem;
-                    color: darken($borderColor, 30);
-                    &:hover{
-                        color: #888;
-                    }
-                }
-            }
+        }
+    }
+    #dashboardContainer .componentContainer{
+        .componentHeader{
+            color: darken($borderColor, 30);
         }
     }
 }

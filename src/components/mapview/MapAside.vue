@@ -52,7 +52,6 @@ import { cloneDeep } from 'lodash'
 
 import { topicContent } from '@/assets/datas/topicList.js'
 
-
 export default {
     data(){
         return {
@@ -73,10 +72,10 @@ export default {
         }
     },
     computed: {
-        ...mapState(['topicToggleDataset', 'activedTopic', 'topicFixedArray'])
+        ...mapState(['topicToggleContent', 'activedTopic'])
     },
     watch: {
-        topicToggleDataset: {
+        topicToggleContent: {
             deep: true,
             immediate: true,
             handler: function(newArray, oldArray){
@@ -87,7 +86,7 @@ export default {
     destroyed() {},
     methods: {
         checkDiff(init){
-            this.targetDiffArray = this.topicToggleDataset.map((newItem, newIndex) => {
+            this.targetDiffArray = this.topicToggleContent.map((newItem, newIndex) => {
                 if(init){
                     return newItem['dataToggle']
                 }else{
@@ -100,7 +99,7 @@ export default {
         processGroup(){
             this.targetTopicToGroup = {}
             this.initPromiseArr = []
-            this.topicToggleDataset.map((element, elementIndex)  => {
+            this.topicToggleContent.map((element, elementIndex)  => {
                 //1) Check group 
                 const groupName = (typeof element.group_index === "number")? this.groupsDisplay[element.group_index]: '不分類'
                 element.group_name = groupName
@@ -123,15 +122,12 @@ export default {
             }
 
             const { index, request_list } = componentItem
-            if(!request_list || !index) return null
-
-            const activedTopicIndex = this.activedTopic.index
-            if(!activedTopicIndex) return null
+            if((!request_list || !index) && request_list.length === 0 ) return null
 
             return request_list.map(async (requestItem, requestIndex) => {
-                const targetTopic = topicContent[activedTopicIndex]
+                const targetTopic = topicContent[this.activedTopic.index]
                 const targetComponent = targetTopic[index]
-                return (targetComponent.length > 0)? (targetComponent[requestIndex]? targetComponent[requestIndex]: null): null
+                return (targetComponent && targetComponent.length > 0)? (targetComponent[requestIndex]? targetComponent[requestIndex]: null): null
             })
         },
         toggleGroupComponent(groupName) {

@@ -31,6 +31,7 @@
                 :chart-data="pieData"
                 :chart-mark="piechartMark"
                 :title-lebel="(pieChartConfig.center && pieChartConfig.center.title)? pieChartConfig.center.title: ''"
+                :dark-mode="darkMode"
             />
             <div class="lagendContent">
                 <div v-if="totalConfig" class="totalItem">
@@ -66,20 +67,23 @@
                 :color-array="colorArray"
                 :scales-show="!isDashboard"
                 :data-unit="(lineChartConfig && lineChartConfig.dataUnit)?lineChartConfig.dataUnit: ''"
+                :dark-mode="darkMode"
             />
         </div>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+
 import { decimalComma, percentageCommon, toFixedFunction } from '@/assets/js/commom.js'
 import { ChartColors } from '@/assets/datas/appConfig.js'
 import DoughnutChart from '@/assets/charts/doughnut.js'
 import LineChart from '@/assets/charts/statisticLine.js'
 
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
-import timezone from 'dayjs/plugin/timezone'
 import CommomHeader from '@/components/CommomHeader.vue'
 
 export default {
@@ -146,6 +150,7 @@ export default {
         this.initFunction()
     },
     computed:{
+        ...mapState(['darkMode']),
         colorArray(){
             return (this.targetRequest.color)? this.targetRequest.color: ChartColors
         },

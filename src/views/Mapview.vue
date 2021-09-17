@@ -10,10 +10,9 @@
     </el-container>
 </template>
 <script>
-import { cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
 
-import { topicComponentList, topicContent } from '@/assets/datas/topicList.js'
+import { topicComponentList, topicList } from '@/assets/datas/topicList.js'
 import MapAside from '@/components/mapview/MapAside'
 import MapboxContainer from '@/components/mapview/MapContainer'
 import HistoryChart from '@/components/mapview/HistoryChart'
@@ -22,13 +21,15 @@ export default {
     components: { MapAside, MapboxContainer, HistoryChart },
     data(){
         return {
-            displayComponent: [],
             displayGroup: [],
-
             historyChartIndex: [],
+            routeQuery: null
         }
     },
     created() {
+        this.routeQuery = this.$route.query
+        const topicItem =  topicList.find(topic => topic.index === this.routeQuery.topicindex)
+        this.$store.commit('updateActivedTopic', topicItem)
         this.initData()
     },
     computed: {...mapState(['activedTopic'])},
@@ -42,23 +43,18 @@ export default {
         }
     },
     methods: {
-        initData(){
-            if(!this.activedTopic || Object.keys(this.activedTopic).length === 0) return
+        initData(){            
             const displayTopic = topicComponentList.find(topic => topic.index === this.activedTopic.index)
-            const {componentindex} = this.$route.query
+            const displayComponent = (displayTopic && displayTopic.components)? displayTopic.components: []
+            this.displayGroup = (displayTopic && displayTopic.groups)? displayTopic.groups: []
 
-            this.displayComponent = []
-            if(displayTopic && displayTopic.components){
-                this.displayComponent = displayTopic.components
-                this.displayGroup = displayTopic.groups
-            }
             const topicToggleData = []
             const historyMapIndex = []
-            if(componentindex && this.displayComponent && this.displayComponent.length > 0){
-                this.displayComponent.map(dataset => {
+            if(this.routeQuery.componentindex && displayComponent && displayComponent.length > 0){
+                displayComponent.map(dataset => {
                     topicToggleData.push({
                         ...dataset,
-                        dataToggle: (dataset.index == componentindex)
+                        dataToggle: (dataset.index == this.routeQuery.componentindex)
                     })
                     if(dataset.map_config && dataset.map_config.length > 0){
                         dataset.map_config.map(data => {

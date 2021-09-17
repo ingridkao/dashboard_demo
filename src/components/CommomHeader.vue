@@ -71,22 +71,6 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/scss/basic.scss";
 @import '@/assets/scss/_color.scss';
-    .boxCardInfo{
-        &.content{
-            @extend %spaceBetween;
-            margin-bottom: 1rem;
-            h3{
-                font-size: 1.1rem;
-            }
-            .desc{
-                display: inline-block;
-                font-size: 0.1rem;
-                .translateTime{
-                    margin-right: 0.25rem;
-                }
-            }
-        }
-    }
     #mapAside{
         .boxCardInfo.content{
             position: absolute;

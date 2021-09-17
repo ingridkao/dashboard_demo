@@ -1,27 +1,27 @@
 export const topicList = [
     {
         index: 'Sentiment',
-        name: '民情熱議',
-        desc: '民眾陳情與派工案件統計',
-        thumbnail: 'telecom_data'
+        name: '市民熱議',
+        desc: '',
+        thumbnail: 'opinion.jpeg'
     },
     {
         index: 'Patrol',
-        name: '城市安防',
-        desc: '天然災害風險地區與避難場所位置',
-        thumbnail: 'telecom_data'
+        name: '防災應變',
+        desc: '',
+        thumbnail: 'disaster.jpeg'
     },
     {
         index: 'Traffic',
         name: '城市交通',
-        desc: '道路交通與運輸',
-        thumbnail: 'telecom_data'
+        desc: '',
+        thumbnail: 'mobility.jpeg'
     },
     {
         index: 'Construction',
-        name: '城市建設',
-        desc: '都市開發建設案件與活化潛力',
-        thumbnail: 'telecom_data'
+        name: '發展建設',
+        desc: '',
+        thumbnail: 'development.jpeg'
     }
 ]
 
@@ -47,7 +47,7 @@ export const topicComponentList = [
                         color: ['#27d5d7'],
                         config:{
                             total: {
-                                title: '單一陳情系統案件累積件數(本週)',
+                                title: '累積件數(本週)',
                                 "formula": 'sum'
                             }
                         },
@@ -72,7 +72,7 @@ export const topicComponentList = [
                 },
                 request_list: [
                     {
-                        "type": 'CountChart',
+                        type: 'CountChart',
                         name: '派工類別',
                         color: ['#fc9f0b', '#dac117', '#FDD79B', '#CA7F09', '#555'],
                         config:{
@@ -92,10 +92,14 @@ export const topicComponentList = [
                             index: "sentiment_dispatching",
                             title: "派工類別",
                             symbol: "heatmap",
+                            property: ["案件編號", "案件類型", "案件狀態", "成案時間", "結案時間", "案件內容"],
                             paint: {
-                                "circle-color":["match",["get", "案件類型"],"大型廢棄物清運聯繫","#fc9f0b","場所與設施噪音舉發","#dac117","污染舉發","#FDD79B","路燈故障或設施損壞","#FDD79B","#555"]
-                            },
-                            property: ["案件編號", "案件類型", "案件狀態", "成案時間", "結案時間", "案件內容", "epoch_time"]
+                                "circle-color":[
+                                    "match",
+                                    ["get", "案件類型"],
+                                    "大型廢棄物清運聯繫","#fc9f0b","場所與設施噪音舉發","#dac117","污染舉發","#FDD79B","路燈故障或設施損壞","#FDD79B","#555"
+                                ]
+                            }
                         }
                     }
                 ]
@@ -149,7 +153,7 @@ export const topicComponentList = [
                                     100
                                 ]
                             },
-                            property: ['名稱', '道路門牌', '服務里別','容納人數']
+                            property: ['名稱', '道路門牌', '水災', '震災', '土石流', '海嘯', '是否設置無障礙設施', '室內', '室外', '服務里別','容納人數']
                         }
                     }
                 ]
@@ -432,7 +436,7 @@ export const topicComponentList = [
                             index: 'traffic_todaywork_view',
                             title: '施工路段',
                             symbol: 'triangle2',
-                            property: ['施工類型','主管機關','施工單位','起始日期','結束日期','施工時段']
+                            property: ['app_name','cb_da','ce_da', 'co_ti', 'tc_na', 'npurp']
                         }
                     }
                 ]
@@ -501,20 +505,22 @@ export const topicComponentList = [
                         raster:{
                             index: 'traffic_accident_location_view',
                             title: '交通事故統計',
-                            property: ['處理別','位置','時間'],
-                            symbol: 'metro',
+                            symbol: 'heatmap',
+                            property: ['type','location','occur_time'],
                             paint: {
-                                'text-halo-color': [
+                                'circle-color': [
                                     'match',
-                                    ['get', 'Countdown'],
-                                    '列車進站',
-                                    '#68ccf8',
-                                    "hsla(240, 0%, 100%, 0)"
+                                    ['get', 'type'],
+                                    '1',
+                                    '#CA0020',
+                                    '2',
+                                    '#F8C3AC',
+                                    '3',
+                                    '#D1D1D1',
+                                    '#ccc'
                                 ]
                             }
                         }
-
-
                     }
                 ]
             },
@@ -526,7 +532,7 @@ export const topicComponentList = [
                 source_from: '捷運公司',
                 request_list: [
                     {
-                        "type": 'KeyFigures',
+                        type: 'KeyFigures',
                         config:{
                             "figures": {
                                 "main": [

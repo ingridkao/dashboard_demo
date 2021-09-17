@@ -30,6 +30,7 @@
                 :scales-show="!isDashboard"
                 :data-unit="(chartTargetArray[0] && chartTargetArray[0]['unit'])?chartTargetArray[0]['unit']: ''"
                 :diff-style="diffChartStyle"
+                :dark-mode="darkMode"
             />
         </div>
     </div>
@@ -38,6 +39,7 @@
 <script>
 //https://www.chartjs.org/samples/latest/scales/time/line-point-data.html
 //https://www.chartjs.org/samples/latest/scales/time/financial.html
+import { mapState } from 'vuex'
 import dayjs from 'dayjs'
 import LineChart from '@/assets/charts/statisticLine.js'
 import CommomHeader from '@/components/CommomHeader.vue'
@@ -111,6 +113,7 @@ export default {
         }
     },
     computed:{
+        ...mapState(['darkMode']),
         isDashboard(){
             return this.view === 'dashboard'
         },

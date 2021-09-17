@@ -9,6 +9,7 @@
                 :chart-mark="chartMark"
                 :title-lebel="titleLebel"
                 :last-value-total="lastDataTotalString"
+                :dark-mode="darkMode"
             />
             <div class="lagendContainer">
                 <div class="lagendContent" :class="[{haveTitle: targetRequest && targetRequest.name},{scroll : Object.keys(pieListValueObj).length > 5}]">
@@ -42,6 +43,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { growthPercentageCommon, percentageToInt, growthIcon, spliteName, toFixedFunction } from '@/assets/js/commom.js'
 
 import CommomHeader from '@/components/CommomHeader.vue'
@@ -119,6 +121,7 @@ export default {
         }
     },
     computed:{
+        ...mapState(['darkMode']),
         requestConfig(){
             if(this.targetRequest && this.targetRequest.config){
                 return this.targetRequest.config

@@ -16,7 +16,37 @@
         transition: display 1s;
     }
 }
-
+.boxCardInfo{
+    &.content{
+        @extend %spaceBetween;
+        margin-bottom: 1rem;
+        h3{
+            font-size: 1.1rem;
+        }
+        .desc{
+            display: inline-block;
+            font-size: 0.1rem;
+            .translateTime{
+                margin-right: 0.25rem;
+            }
+        }
+    }
+    &.datasets{
+        h6{
+            font-size: 0.9rem;
+            margin: .5rem 0;
+        }
+    }
+    &.right{
+        justify-content: flex-end;
+    }
+    &.center{
+        justify-content: center;
+    }
+    span.ellipsis{
+        font-size: .75rem;
+    }
+}
 .cardContainer{
     .boxCard{
         position: relative;
@@ -43,18 +73,6 @@
             padding: 0;
             >div{
                 width: 100%;
-            }
-        }
-        .boxCardInfo{
-            @extend %spaceBetween;
-            &.right{
-                justify-content: flex-end;
-            }
-            &.center{
-                justify-content: center;
-            }
-            span.ellipsis{
-                font-size: .75rem;
             }
         }
         .disabledBlock{
@@ -129,12 +147,6 @@
         > div{
             @extend %flexStart;
             justify-content: flex-end;
-        }
-    }
-    .boxCardInfo.datasets{
-        h6{
-            font-size: 0.9rem;
-            margin: .5rem 0;
         }
     }
 }

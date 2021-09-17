@@ -29,6 +29,10 @@ export default {
         colorArray: {
             type: Array,
             default:() => []
+        },
+        darkMode: { 
+            type: String,
+            default: 'dark'
         }
     },
     data: () => ({
@@ -58,6 +62,12 @@ export default {
             }
             this.renderLineChart()
         },
+        darkMode() {
+            if(this.$data._chart){
+                this.$data._chart.destroy()
+            }
+            this.renderLineChart()
+        },
         deep: true
     },
     mounted() {
@@ -71,7 +81,7 @@ export default {
                     const gradient = this.$refs.canvas.getContext('2d').createLinearGradient(0, 0, 0, 120)
                     const rgb = hexAToRGB(this.colorArray[i])
                     gradient.addColorStop(0, `rgba(${rgb},0.8)`)
-                    gradient.addColorStop(1, `rgba(28,28,28,0.3)`)
+                    gradient.addColorStop(1, (this.darkMode === 'dark')? "rgba(28,28,28,0.3)": 'rgba(252,252,252,0.3)')
                     newDatasets.push({
                         ...item,
                         lineTension: 0,
@@ -103,16 +113,8 @@ export default {
                 }
                 this.options.animation = {
                     duration: 1000,
-                    // onProgress: (context) => {
-                        // console.log('animation Progress')
-                    // },
                     onComplete: (context) => {
                         this.$emit('on-complete')
-                        // if (context.initial) {
-                        //     console.log('Initial animation finished')
-                        // } else {
-                        //     console.log('animation finished')
-                        // }
                     }
                 }
                 this.options.onClick = () => {

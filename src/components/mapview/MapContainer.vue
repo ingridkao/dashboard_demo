@@ -39,10 +39,9 @@ export default {
         return {
             publicPath: process.env.BASE_URL,
             connectServer: false,
-
             MapBoxObject: null,
-
             mapLoadong: true,
+
             mapDisplayLayers: [],        
             mapInitFetchLayers: {},
             mapRepeatingLayers: {},
@@ -68,7 +67,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['topicToggleDataset', 'historyLineData', 'historyFilter', 'activedTopic']),
+        ...mapState(['topicToggleContent', 'historyLineData', 'historyFilter']),
         nowFeatureData() {
             let obj = this.clickFeatureDatas[this.selectFeatureIndex]
             if(!obj) obj = this.clickFeatureDatas[0]
@@ -76,7 +75,7 @@ export default {
         },
         propertyObj() {
             const obj = {}
-            this.topicToggleDataset.map(component => {
+            this.topicToggleContent.map(component => {
                 if(component.map_config && component.map_config.length > 0){
                     component.map_config.map(data => {
                         Object.keys(data).map(key => {
@@ -90,11 +89,10 @@ export default {
         }
     },
     watch: {
-        topicToggleDataset: {
-            handler: function(newObj){
-                if(newObj && newObj.length > 0){
-                    this.mapRepeatingLayers = {}
-                    this.fetchDataToMap(newObj)
+        topicToggleContent: {
+            handler: function(newObj, oldObj){
+                if(oldObj && oldObj.length > 0){
+                    this.resetFetchAllMap()
                 }
             },
             deep: true,
@@ -113,24 +111,23 @@ export default {
             },
             deep: true,
             immediate: false
-        },
-        activedTopic: {
-            deep: true,
-            immediate: false,
-            handler: function(newObj, oldObj){
-                if(oldObj){
-                    this.resetAll()
-                }
-            }
         }
     },
     methods: {
-        resetAll(){
+        resetFetchAllMap(){
             this.mapDisplayLayers.map(layer => {
-                // this.MapBoxObject.removeLayer(layer);
-                // this.MapBoxObject.removeSource(`${layer}-source`);
+                this.MapBoxObject.removeLayer(layer);
+                if(this.MapBoxObject.getLayer(`${layer}-heat`)){
+                    this.MapBoxObject.removeLayer(`${layer}-heat`)
+                }
+                this.MapBoxObject.removeSource(`${layer}-source`)
             })
-            // this.mapDisplayLayers = []
+            this.mapDisplayLayers = []
+            this.mapInitFetchLayers = {}
+            this.mapRepeatingLayers = {}
+
+
+            this.fetchDataToMap(this.topicToggleContent)
         },
         initMapBox() {
             mapboxgl.accessToken = MAPBOXTOKEN
@@ -191,8 +188,8 @@ export default {
                 this.MapBoxObject.addSource('taipei_village', { type: 'geojson', data: response }).addLayer(mapLayerStyle.taipeiVillage)
             })
             
-            if(this.topicToggleDataset && this.topicToggleDataset.length > 0){
-                this.fetchDataToMap(this.topicToggleDataset)
+            if(this.topicToggleContent && this.topicToggleContent.length > 0){
+                this.fetchDataToMap(this.topicToggleContent)
             }
 
             this.MapBoxObject.on("click", (event) => {

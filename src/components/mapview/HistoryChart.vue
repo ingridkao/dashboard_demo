@@ -1,5 +1,5 @@
 <template>
-    <div id="historyChartBox" v-loading="chartLoad" element-loading-background="rgb(14,19,25,0.3)">
+    <div id="historyChartBox" v-loading="chartLoad" :element-loading-background="loadingBackground">
         <div class="filterDataBtn">
             <div>
                 <el-button type="text" :disabled="filterBtnDisable" :class="{active : filterType === 'hour'}" @click="switchType('hour')">Last 24 hours</el-button>
@@ -12,6 +12,7 @@
             :labels-data="labelsData" 
             :chart-datasets="lineData" 
             :color-array="lineColor"
+            :dark-mode="darkMode"
             @on-complete="chartLoad = false"
             @on-receive="receiveChart"
         />
@@ -47,10 +48,13 @@ export default {
         } 
     },
     computed: {
-        ...mapState(['topicToggleDataset'])
+        ...mapState(['topicToggleContent', 'darkMode']),
+        loadingBackground(){
+            return this.darkMode === 'dark'? 'rgb(14,19,25,0.3)': 'rgb(234,234,234,0.8)'
+        }
     },
     watch: {
-        topicToggleDataset: {
+        topicToggleContent: {
             deep: true,
             immediate: false,
             handler: function(newObj, oldObj){
@@ -212,7 +216,7 @@ export default {
         width: calc(100% - 27rem);
         bottom: 0;
         right: 0;
-        padding: 0.25rem;
+        padding: 0 0.25rem;
         .filterDataBtn{
             @extend %spaceBetween;
             margin-left: 1rem;

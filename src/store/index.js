@@ -14,14 +14,13 @@ export default new Vuex.Store({
         authTopicListArray: [],
         topicDefaultObj: {},
         topicCustomizedArray: [],
-        topicFixedArray: [],
         topiclContentObj: {},
         token: {
             access_token: localStorage.getItem('access_token') || '',
             refresh_token: localStorage.getItem('refresh_token') || '',
             token_type: localStorage.getItem('token_type') || '',
         },
-        topicToggleDataset: [],
+        topicToggleContent: [],
         globalLoading: false,
         userProfile: {},
         authGroupObj: {},
@@ -41,9 +40,8 @@ export default new Vuex.Store({
             state.activedTopic = obj
         },
         updateTopicContent(state, payload) {
-            state.topicToggleDataset = (payload && payload.length > 0)? payload: []
+            state.topicToggleContent = (payload && payload.length > 0)? payload: []
         },
-
         updateHistoryLineData(state, payload){
             state.historyLineData = []
             if(payload && payload.length > 0){
