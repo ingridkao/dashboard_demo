@@ -66,23 +66,6 @@ export default {
         }
     },
     methods: {
-        translateTimes(){
-            let endDate = ''
-            switch (this.filterType) {
-                case 'hour':
-                    endDate = dayjs(`${dayjs(this.datePicker).format('YYYY-MM-DD')} 23:59:59`, 'YYYY-MM-DD HH:mm:ss')
-                    break
-                case 'day':
-                    const daysInMonth = dayjs(this.datePicker).daysInMonth()
-                    endDate = dayjs(`${dayjs(this.datePicker).format('YYYY-MM')}-${daysInMonth} 23:59:59`, 'YYYY-MM-DD HH:mm:ss')
-                    break
-                case 'month':
-                    const datePickerYear = dayjs(this.datePicker).format('YYYY')
-                    endDate = dayjs(`${datePickerYear}-12-31 23:59:59`, 'YYYY-MM-DD HH:mm:ss')
-                break
-            }
-            this.endDay = dayjs(endDate, 'YYYY-MM-DD HH:mm:ss')
-        },
         switchType(type){
             if(!type) return
             this.filterType = type
@@ -98,7 +81,7 @@ export default {
             this.labelsData = []
             this.lineData = []
 
-            this.filterBtnDisable = true
+            // this.filterBtnDisable = true
             this.chartLoad = true
 
             let historyChartIndex = 0
@@ -121,7 +104,7 @@ export default {
                         }
                     })
                     this.updateChart()
-                    this.filterBtnDisable = false
+                    // this.filterBtnDisable = false
                 }).catch(e=>{
                     console.log(e);
                 })
@@ -138,8 +121,11 @@ export default {
                 if(dataItem.data && dataItem.data[0]['value'] && dataItem.data[0]['value'].length > 0){
                     const datas = dataItem.data[0]['value']
                     if(datas && datas.length > 0){
-                        datas.map(item => {
+                        datas.map((item, index) => {
                             targetLineDatas.unshift(item.value)
+                            if(index === 0){
+                                this.endDay = dayjs(item.valueTime, 'YYYY-MM-DD HH:mm:ss')
+                            }
                             if(dataIndex === 0){
                                 switch (this.filterType) {
                                     case 'hour':
@@ -169,8 +155,6 @@ export default {
             }
         },
         receiveChart(data){
-            this.translateTimes()
-
             if(data){
                 let filterStartTime = null
                 let filterEndTime = null
@@ -192,7 +176,6 @@ export default {
                         const str = data.label.split('月')
                         const ym = `${this.endDay.format('YYYY')}-${str[0]}`
                         const daysInMonth = dayjs(ym).daysInMonth()
-
                         filterStartTime = dayjs(`${ym}-01 00:00:00`, 'YYYY-M-DD HH:mm:ss')     
                         filterEndTime = dayjs(`${ym}-${daysInMonth} 23:59:59`, 'YYYY-M-DD HH:mm:ss')
                         break

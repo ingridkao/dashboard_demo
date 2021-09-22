@@ -506,7 +506,7 @@ export const topicComponentList = [
                             index: 'traffic_accident_location_view',
                             title: '交通事故統計',
                             symbol: 'heatmap',
-                            property: ['type','location','occur_time'],
+                            property: ['type','location','occur_time', 'epoch_time'],
                             paint: {
                                 'circle-color': [
                                     'match',

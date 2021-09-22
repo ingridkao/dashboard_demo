@@ -552,6 +552,7 @@ export default {
         },
         historyMapFilter(){
             if(this.historyFilter && this.historyFilter.start && this.historyFilter.end){
+                console.log(1);
                 const MapBoxObjectProperty = [
                     "any",  
                     ['!', ['has', 'epoch_time']],
