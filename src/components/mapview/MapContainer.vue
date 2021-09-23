@@ -2,7 +2,7 @@
     <el-main 
         id="mapboxContainer" 
         v-loading="mapLoadong"
-        element-loading-background="#050709"
+        :element-loading-background="loadingBackground"
     >
         <!-- <button id="fitTaipeiBtn" @click="fitTaipei">Fit to Taipei</button> -->
         <div id="mapboxBox" class="history"/>
@@ -67,7 +67,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['topicToggleContent', 'historyLineData', 'historyFilter']),
+        ...mapState(['topicToggleContent', 'historyLineData', 'historyFilter', 'darkMode']),
         nowFeatureData() {
             let obj = this.clickFeatureDatas[this.selectFeatureIndex]
             if(!obj) obj = this.clickFeatureDatas[0]
@@ -86,6 +86,9 @@ export default {
                 }
             })
             return obj
+        },
+        loadingBackground(){
+            return this.darkMode === 'dark'? 'rgb(14,19,25,0.3)': 'rgb(240,240,240,0.8)'
         }
     },
     watch: {
@@ -126,7 +129,6 @@ export default {
             this.mapInitFetchLayers = {}
             this.mapRepeatingLayers = {}
 
-
             this.fetchDataToMap(this.topicToggleContent)
         },
         initMapBox() {
@@ -161,13 +163,22 @@ export default {
 
             // disable map zoom when using scroll
             // this.MapBoxObject.scrollZoom.disable();
-
-            this.MapBoxObject.on("load", () => {
+            //https://docs.mapbox.com/mapbox-gl-js/api/map/#map.event:load
+            this.MapBoxObject.on('load', () => {
+                this.mapLoadong = true
                 this.mapLoadLayer()
+            });
+            this.MapBoxObject.on('render', () => {
+                this.mapLoadong = true
+            });
+            this.MapBoxObject.on('idle', () => {
+                this.mapLoadong = false
+            });
+            this.MapBoxObject.on('error', () => {
+                console.log('A error event occurred.')
             })
         },
         mapLoadLayer() {
-            this.mapLoadong = true
             //1) Taipei 3D buildings 
             if(this.connectServer){
                 //from geoserver
@@ -204,7 +215,6 @@ export default {
                 // console.log( this.MapBoxObject.getZoom())
             //     // console.log(JSON.stringify(event.lngLat.wrap()))
             })
-            this.mapLoadong = false
         },
         fetchDataToMap(themeObj){
             if(themeObj && themeObj.length > 0){
@@ -232,7 +242,6 @@ export default {
                                             toggle: themeItem.dataToggle? 1: 0
                                         }
                                     }
-                                    this.mapLoadong = true
                                     this.$api_method.get(`../../datas/${mapLayerIndex}.geojson`).then((response) => {
                                         if(response){
                                             this.MapBoxObject.addSource(`${mapLayerIndex}-source`, {
@@ -477,7 +486,6 @@ export default {
                 }
                 this.interactiveLayers.push(interactiveLayer)
             }
-            this.mapLoadong = false
         },
         createRealtimeLayer(dataItem, dataToggle){
             if(!dataItem) return

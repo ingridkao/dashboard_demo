@@ -47,8 +47,14 @@ export default {
             endDay: null
         } 
     },
+    props: {
+        topicToggleContent:{
+            type: Array ,
+            default: () =>{ return [] }
+        }
+    },
     computed: {
-        ...mapState(['topicToggleContent', 'darkMode']),
+        ...mapState(['darkMode']),
         loadingBackground(){
             return this.darkMode === 'dark'? 'rgb(14,19,25,0.3)': 'rgb(234,234,234,0.8)'
         }
@@ -56,8 +62,8 @@ export default {
     watch: {
         topicToggleContent: {
             deep: true,
-            immediate: false,
-            handler: function(newObj, oldObj){
+            immediate: true,
+            handler: function(newObj){
                 this.newDataset = cloneDeep(newObj)
                 if(newObj && newObj.length > 0 ){
                     this.fetchData()

@@ -6,7 +6,9 @@
         <MapboxContainer 
             :history-chart-index="historyChartIndex"
         />
-        <HistoryChart/>
+        <HistoryChart
+            :topic-toggle-content="topicToggleContent"    
+        />
     </el-container>
 </template>
 <script>
@@ -23,6 +25,7 @@ export default {
         return {
             displayGroup: [],
             historyChartIndex: [],
+            topicToggleContent: [],
             routeQuery: null
         }
     },
@@ -48,11 +51,11 @@ export default {
             const displayComponent = (displayTopic && displayTopic.components)? displayTopic.components: []
             this.displayGroup = (displayTopic && displayTopic.groups)? displayTopic.groups: []
 
-            const topicToggleData = []
+            this.topicToggleContent = []
             const historyMapIndex = []
             if(this.routeQuery.componentindex && displayComponent && displayComponent.length > 0){
                 displayComponent.map(dataset => {
-                    topicToggleData.push({
+                    this.topicToggleContent.push({
                         ...dataset,
                         dataToggle: (dataset.index == this.routeQuery.componentindex)
                     })
@@ -67,7 +70,7 @@ export default {
                     }
                 })
             }
-            this.$store.commit('updateTopicContent', topicToggleData)
+            this.$store.commit('updateTopicContent', this.topicToggleContent)
             this.$store.commit('updateHistoryLineData', historyMapIndex)
         }
     }
