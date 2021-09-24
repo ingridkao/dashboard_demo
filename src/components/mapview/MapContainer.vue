@@ -118,6 +118,7 @@ export default {
     },
     methods: {
         resetFetchAllMap(){
+            this.mapLoadong = true
             this.mapDisplayLayers.map(layer => {
                 this.MapBoxObject.removeLayer(layer);
                 if(this.MapBoxObject.getLayer(`${layer}-heat`)){
@@ -168,9 +169,7 @@ export default {
                 this.mapLoadong = true
                 this.mapLoadLayer()
             });
-            this.MapBoxObject.on('render', () => {
-                this.mapLoadong = true
-            });
+            this.MapBoxObject.on('render', () => {});
             this.MapBoxObject.on('idle', () => {
                 this.mapLoadong = false
             });
