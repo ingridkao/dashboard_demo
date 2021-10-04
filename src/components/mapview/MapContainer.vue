@@ -6,15 +6,20 @@
     >
         <!-- <button id="fitTaipeiBtn" @click="fitTaipei">Fit to Taipei</button> -->
         <div id="mapboxBox" class="history"/>
+        <div id="calculationBox" v-if="calculated !== ''" v-html="calculated"/>
     </el-main>
 </template>
 <script>
 import { mapState } from 'vuex'
 
 import mapboxgl from 'mapbox-gl'
+import MapboxDraw from '@mapbox/mapbox-gl-draw'
+
 import 'mapbox-gl/dist/mapbox-gl.css'
 const MAPBOXTOKEN = process.env.VUE_APP_MAPBOXTOKEN
 const MapboxLanguage = require('@/assets/js/mapbox-gl-language.js')
+import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
+
 import * as turf from '@turf/turf' 
 // import '@/assets/js/threebox.js'
 
@@ -50,7 +55,8 @@ export default {
             selectFeatureIndex: 0,
             clickFeatureDatas: [],
 
-            hoveredFeature: {}
+            hoveredFeature: {},
+            calculated: ''
         } 
     },
     mounted() {
@@ -164,11 +170,17 @@ export default {
 
             // disable map zoom when using scroll
             // this.MapBoxObject.scrollZoom.disable();
-            //https://docs.mapbox.com/mapbox-gl-js/api/map/#map.event:load
-            this.MapBoxObject.on('load', () => {
-                this.mapLoadong = true
+
+            this.mapDrawInitialized()
+
+            //indicating whether the map is fully loaded.
+            if (this.MapBoxObject.loaded()) {
                 this.mapLoadLayer()
-            });
+            } else {
+                //https://docs.mapbox.com/mapbox-gl-js/api/map/#map.event:load
+                this.MapBoxObject.on('load', () => this.mapLoadLayer())
+            }
+
             this.MapBoxObject.on('render', () => {});
             this.MapBoxObject.on('idle', () => {
                 this.mapLoadong = false
@@ -178,6 +190,7 @@ export default {
             })
         },
         mapLoadLayer() {
+            this.mapLoadong = true
             //1) Taipei 3D buildings 
             if(this.connectServer){
                 //from geoserver
@@ -202,18 +215,18 @@ export default {
                 this.fetchDataToMap(this.topicToggleContent)
             }
 
-            this.MapBoxObject.on("click", (event) => {
-                this.MapBoxObject.getCanvas().style.cursor = 'pointer'
-                this.clickFeatureDatas = this.MapBoxObject.queryRenderedFeatures(event.point, { layers: this.mapDisplayLayers })
-                if(this.clickFeatureDatas.length > 0){
-                    this.mapboxPopupGetInfo(event)
-                }
-                // console.log( this.MapBoxObject.getBounds())
-                // console.log( this.MapBoxObject.getCenter())
-                // console.log( this.MapBoxObject.getBearing())
-                // console.log( this.MapBoxObject.getZoom())
-            //     // console.log(JSON.stringify(event.lngLat.wrap()))
-            })
+            // this.MapBoxObject.on("click", (event) => {
+            //     this.MapBoxObject.getCanvas().style.cursor = 'pointer'
+            //     this.clickFeatureDatas = this.MapBoxObject.queryRenderedFeatures(event.point, { layers: this.mapDisplayLayers })
+            //     if(this.clickFeatureDatas.length > 0){
+            //         this.mapboxPopupGetInfo(event)
+            //     }
+            //     // console.log( this.MapBoxObject.getBounds())
+            //     // console.log( this.MapBoxObject.getCenter())
+            //     // console.log( this.MapBoxObject.getBearing())
+            //     // console.log( this.MapBoxObject.getZoom())
+            // //     // console.log(JSON.stringify(event.lngLat.wrap()))
+            // })
         },
         fetchDataToMap(themeObj){
             if(themeObj && themeObj.length > 0){
@@ -572,6 +585,45 @@ export default {
                     }
                 })
             }
+        },
+        mapDrawInitialized(){
+            const draw = new MapboxDraw({
+                displayControlsDefault: false,
+                controls: {
+                    line_string: true,
+                    polygon: true,
+                    trash: true
+                }
+            });
+            const updateArea = (e) => {
+                const {features, type} = e
+                if(type === 'draw.delete'){
+                    this.calculated = ''
+                }else if (features && features.length > 0) {
+                    const {geometry} = features[0]
+                    const {type, coordinates} = geometry
+                    const innreHtml = (answer) => {
+                        const rounded_answer = Math.round(answer * 1000) / 1000;
+                        this.calculated = `<strong>${rounded_answer}</strong>k㎡`
+                    }
+                    if(type === 'LineString'){
+                        const lineString = turf.lineString(coordinates)
+                        const length = turf.length(lineString, {units: 'kilometers'})
+                        innreHtml(length)
+                        console.log(length);
+                    }else if(type === 'Polygon'){
+                        const polygon = turf.polygon(coordinates)
+                        const area = turf.area(polygon, {units: 'kilometers'})
+                        innreHtml(area)
+                    }else{
+                        this.calculated = ''
+                    }
+                }
+            }
+            this.MapBoxObject.addControl(draw);
+            this.MapBoxObject.on('draw.create',  (e) =>  updateArea(e) )
+            this.MapBoxObject.on('draw.update',  (e) =>  updateArea(e) )
+            this.MapBoxObject.on('draw.delete',  (e) =>  updateArea(e) )
         }
     }
 }

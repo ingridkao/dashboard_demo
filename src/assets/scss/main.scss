@@ -172,6 +172,12 @@
                 height: calc(100% - 11rem);
             }
         }
+        &#calculationBox{
+            position: absolute;
+            top: 1rem;
+            right: 3.75rem;
+            width: auto;
+        }
     }
     #fitTaipeiBtn{
         position: absolute;
