@@ -34,6 +34,8 @@ import { mapState } from 'vuex'
 import LineChart from '@/assets/charts/lineChart.js'
 import { ChartColors } from '@/assets/datas/appConfig.js'
 
+const BASE_URL = process.env.VUE_APP_BASE_URL
+
 export default {
     components: { LineChart },
     data(){
@@ -117,7 +119,7 @@ export default {
                     this.historyDataNames.push((dataTarget.name)? dataTarget.name: dataTarget.index)
                     this.lineColor.push(requestColorArray[historyChartIndex])
 
-                    APIsURL.push(this.$axios.get(`../../datas/${this.filterType}/${dataTarget.calculation_config.table}.json`))   
+                    APIsURL.push(this.$axios.get(`${BASE_URL}/datas/${this.filterType}/${dataTarget.calculation_config.table}.json`))   
                 }
             })
             if(APIsURL.length > 0){

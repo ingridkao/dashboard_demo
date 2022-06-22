@@ -22,9 +22,10 @@ import mapboxgl from 'mapbox-gl'
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
-const MAPBOXTOKEN = process.env.VUE_APP_MAPBOXTOKEN
-const MapboxLanguage = require('@/assets/js/mapbox-gl-language.js')
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
+const MapboxLanguage = require('@/assets/js/mapbox-gl-language.js')
+const MAPBOXTOKEN = process.env.VUE_APP_MAPBOXTOKEN
+const BASE_URL = process.env.VUE_APP_BASE_URL
 
 import * as turf from '@turf/turf' 
 
@@ -203,10 +204,10 @@ export default {
             this.MapBoxObject.addLayer(mapLayerStyle.buildingsIn3D)
 
             //2) Unstable Geoserver source - taipei_village & tp_village
-            this.$api_method.get(`../../datas/taipei_town.geojson`).then((response) => {
+            this.$api_method.get(`${BASE_URL}/datas/taipei_town.geojson`).then((response) => {
                 this.MapBoxObject.addSource('taipei_town', { type: 'geojson', data: response }).addLayer(mapLayerStyle.taipeiTown)
             })
-            this.$api_method.get(`../../datas/taipei_village.geojson`).then((response) => {
+            this.$api_method.get(`${BASE_URL}/datas/taipei_village.geojson`).then((response) => {
                 this.MapBoxObject.addSource('taipei_village', { type: 'geojson', data: response }).addLayer(mapLayerStyle.taipeiVillage)
             })
             
@@ -253,7 +254,7 @@ export default {
                                             toggle: themeItem.dataToggle? 1: 0
                                         }
                                     }
-                                    this.$api_method.get(`../../datas/${mapLayerIndex}.geojson`).then((response) => {
+                                    this.$api_method.get(`${BASE_URL}/datas/${mapLayerIndex}.geojson`).then((response) => {
                                         if(response){
                                             this.MapBoxObject.addSource(`${mapLayerIndex}-source`, {
                                                 type: "geojson",

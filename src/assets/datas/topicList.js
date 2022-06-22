@@ -60,6 +60,7 @@ export const topicComponentList = [
                     }
                 ]
             },
+            /*
             {
                 index: 'dispatching',
                 name: '派工案件(當週)',
@@ -104,6 +105,7 @@ export const topicComponentList = [
                     }
                 ]
             }
+            */
         ]
     },
     {

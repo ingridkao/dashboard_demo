@@ -4,7 +4,7 @@ node_modules
 
 # local env files
 .env.local
-.env.*.local
+.env.production
 
 # Log files
 npm-debug.log*
@@ -24,7 +24,3 @@ yarn.lock
 *.njsproj
 *.sln
 *.sw?
-
-# Large file
-public/datas/building_age.geojson
-public/datas/sentiment_dispatching.geojson
