@@ -34,7 +34,7 @@
             :before-close="handleClose">
             <div class="topicContainer">
                 <div class="topicItem" v-for="(topicItem, topicIndex) in topicList" :key="topicIndex" :class="[{active: activedTopic && activedTopic.index === topicItem.index}]" @click="topicPickerUpdate(topicItem)">
-                    <img :src="require(`@/assets/images/thumb/${topicItem.thumbnail}`)" :alt="topicItem.name">
+                    <img :src="parseTopicImage(topicItem)" :alt="topicItem.name">
                     <!-- <div>
                         <h6>{{topicItem.name}}</h6>
                         <p>{{topicItem.desc}}</p>
@@ -85,6 +85,9 @@ export default {
         },
         topicPickerUpdate(topicItem){
             this.$store.commit('updateActivedTopic', topicItem)
+        },
+        parseTopicImage(topicItem){
+            return require(`@/assets/images/thumb/${topicItem.thumbnail}`)
         }
     }
 }

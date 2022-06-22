@@ -10,15 +10,6 @@ module.exports = {
         ],
     },
     devServer: {
-        port: 1234,
-        proxy: {
-            '/geo_server': {
-                target: 'http://172.25.201.102:8600/geoserver',
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/geo_server': ''
-                }
-            }
-        }
+        port: 1234
     }
 }

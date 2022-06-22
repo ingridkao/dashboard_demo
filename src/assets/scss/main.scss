@@ -167,10 +167,7 @@
         width: 100%;
         border-radius: .75rem;
         &#mapboxBox{
-            height: 100%;
-            &.history{
-                height: calc(100% - 11rem);
-            }
+            height: calc(100% - 3rem);
         }
         &#calculationBox{
             position: absolute;

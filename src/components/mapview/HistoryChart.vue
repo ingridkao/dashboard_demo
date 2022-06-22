@@ -1,6 +1,13 @@
 <template>
-    <div id="historyChartBox" v-loading="chartLoad" :element-loading-background="loadingBackground">
-        <div class="filterDataBtn">
+    <div 
+        id="historyChartBox" 
+        v-loading="chartLoad" 
+        :element-loading-background="loadingBackground" 
+        :class="{toggleOpen: toggleHistory}"
+        :style="{backgroundColor: historyBoxBackground}"
+    >
+        <el-button id="toggleHistoryBtn" size="small" :icon="toggleHistory?'el-icon-arrow-up':'el-icon-arrow-down'" @click="toggleHistoryBtn">時間軸</el-button>
+        <div id="filterDataBtn">
             <div>
                 <el-button type="text" :disabled="filterBtnDisable" :class="{active : filterType === 'hour'}" @click="switchType('hour')">Last 24 hours</el-button>
                 <el-button type="text" :disabled="filterBtnDisable" :class="{active : filterType === 'day'}" @click="switchType('day')">Last 30 days</el-button>
@@ -44,7 +51,9 @@ export default {
             filterType: 'day',
             filterBtnDisable: false,
             datePicker: '2020-12-31T15:59:59Z',
-            endDay: null
+            endDay: null,
+
+            toggleHistory: false
         } 
     },
     props: {
@@ -56,7 +65,10 @@ export default {
     computed: {
         ...mapState(['darkMode']),
         loadingBackground(){
-            return this.darkMode === 'dark'? 'rgb(14,19,25,0.3)': 'rgb(234,234,234,0.8)'
+            return this.darkMode === 'dark'? 'rgba(14,19,25,0.3)': 'rgba(234,234,234,0.8)'
+        },
+        historyBoxBackground(){
+            return this.darkMode === 'dark'? 'rgb(14,19,25)': 'rgb(234,234,234)'
         }
     },
     watch: {
@@ -72,6 +84,12 @@ export default {
         }
     },
     methods: {
+        toggleHistoryBtn(){
+            this.toggleHistory = !this.toggleHistory
+            if(this.toggleHistory){
+                this.switchType('day')
+            }
+        },
         switchType(type){
             if(!type) return
             this.filterType = type
@@ -200,19 +218,30 @@ export default {
 <style lang="scss">
 @import "~@/assets/scss/_color.scss";
 @import "~@/assets/scss/basic.scss";
+$subTextColor: #a8a6a6;
     #historyChartBox{
         position: absolute;
         width: calc(100% - 27rem);
-        bottom: 0;
+        height: 12.5rem;
+        bottom: -12.5rem;
         right: 0;
         padding: 0 0.25rem;
-        .filterDataBtn{
+        transition: bottom 1s;
+        z-index: 2;
+        &.toggleOpen{
+            bottom: 0;
+        }
+        #toggleHistoryBtn{
+            position: absolute;
+            top: -2rem;
+            right: 1.5rem;
+        }
+        #filterDataBtn{
             @extend %spaceBetween;
-            margin-left: 1rem;
-            color: #a8a6a6;
+            color: $subTextColor;
             .el-button--text{
                 font-size: 0.8rem;
-                color: #a8a6a6;
+                color: $subTextColor;
                 margin: 0;
                 padding: 0.5rem;
                 opacity: 0.7;

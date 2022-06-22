@@ -89,9 +89,9 @@
         .el-card,
         #mapboxContainer > div{            
             color: $grayColor;
-            background-color: $lightCardBackgroundColor;
         }
         .el-card{
+            background-color: $lightCardBackgroundColor;
             button i{
                 color: $blackColor;
             }
@@ -119,6 +119,8 @@
     }
     #mapboxContainer > div{
         color: $whiteColor;
+    }
+    .el-card{
         background-color: $mainCardBackgroundColor;
     }
     .subTitleData{

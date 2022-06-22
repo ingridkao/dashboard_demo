@@ -2,8 +2,8 @@
 import ElementModify from './element'
 
 const lang = {
-    AppTitle: '臺北市政府城市運行儀表板',
-    AppTitleEng: 'Taipei Urban Intelligence Dashboard',
+    AppTitle: '城市運營聯合儀表板',
+    AppTitleEng: 'Taipei City Dashboard',
 
     TaipeiPassLogin: '台北通登入',
     EmailSignin: '使用E-mail註冊',

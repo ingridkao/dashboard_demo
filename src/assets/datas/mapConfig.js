@@ -50,47 +50,6 @@ export const buildingsIn3D = {
     }
 }
 
-export const taipeiBuilding = {
-    id: "hessen",
-    source: "TaipeiBuild",
-    "source-layer": "tp_building_height",
-    type: 'fill-extrusion',
-    minzoom: 14,
-    paint: {
-        'fill-extrusion-color': buildColor,
-        //1_bud_high = 屋頂高度1_top_high - 出入口高度1_ent_heig
-        // 'fill-extrusion-height': ['get', '1_bud_high'],
-        'fill-extrusion-height': [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            0,
-            [
-              "interpolate",
-              ["linear"],
-              ["get", "1_top_high"],
-              2.2,
-              0,
-              1044.14,
-              1044.14
-            ],
-            22,
-            [
-              "interpolate",
-              ["linear"],
-              ["get", "1_top_high"],
-              2.2,
-              0,
-              1044.14,
-              1044.14
-            ]
-          ]
-        ,
-        'fill-extrusion-base': ['get', '1_ent_heig'],
-        'fill-extrusion-opacity': 0.8
-    }
-}
-
 export const taipeiTown = {
     id: 'taipei_town',
     source: 'taipei_town',

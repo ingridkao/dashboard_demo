@@ -4,13 +4,19 @@
         v-loading="mapLoadong"
         :element-loading-background="loadingBackground"
     >
-        <!-- <button id="fitTaipeiBtn" @click="fitTaipei">Fit to Taipei</button> -->
-        <div id="mapboxBox" class="history"/>
+        <div id="mapboxBox"/>
         <div id="calculationBox" v-if="calculated !== ''" v-html="calculated"/>
+        <ZoominBox
+            :can-usefree-camera.sync="canUsefreeCamera"
+            :mapbox-object="MapBoxObject"
+            :mapbox-popup="MapBoxPopup"
+        />
     </el-main>
 </template>
 <script>
 import { mapState } from 'vuex'
+import MapboxPopup from '@/components/mapbox/MapboxPopup.vue'
+import ZoominBox from '@/components/mapview/ZoominContainer.vue'
 
 import mapboxgl from 'mapbox-gl'
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
@@ -21,15 +27,13 @@ const MapboxLanguage = require('@/assets/js/mapbox-gl-language.js')
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
 
 import * as turf from '@turf/turf' 
-// import '@/assets/js/threebox.js'
 
 import * as mapLayerStyle from '@/assets/datas/mapConfig.js'
 import mapStyle from '@/assets/datas/mapStyle.js'
+import { Positions } from '@/assets/datas/mapType.js'
 
 import { BasicColors } from '@/assets/datas/appConfig.js'
 import { hexAToRGB } from '@/assets/js/commom.js'
-
-import MapboxPopup from '@/components/mapbox/MapboxPopup.vue'
 
 //SVG is not supported in mapbox
 const bikePng = require('@/assets/images/mapbox/bike.png')
@@ -43,8 +47,9 @@ export default {
     data(){
         return {
             publicPath: process.env.BASE_URL,
-            connectServer: false,
             MapBoxObject: null,
+            MapBoxPopup: null,
+
             mapLoadong: true,
 
             mapDisplayLayers: [],        
@@ -56,7 +61,8 @@ export default {
             clickFeatureDatas: [],
 
             hoveredFeature: {},
-            calculated: ''
+            calculated: '',
+            canUsefreeCamera: false
         } 
     },
     mounted() {
@@ -66,6 +72,7 @@ export default {
         //Clean up and release all internal resources associated with this map. This includes DOM elements, event bindings, web workers, and WebGL resources.
         this.MapBoxObject.remove()
     },
+    components: { ZoominBox },
     props: {
         historyChartIndex:{
             type: Array ,
@@ -123,6 +130,9 @@ export default {
         }
     },
     methods: {
+       clearMapboxPopup(){
+            if(this.MapBoxPopup)this.MapBoxPopup.remove()
+        },
         resetFetchAllMap(){
             this.mapLoadong = true
             this.mapDisplayLayers.map(layer => {
@@ -144,17 +154,14 @@ export default {
                 antialias: true,
                 container: "mapboxBox",
                 style: mapStyle,
-                center: [121.53797494005369, 25.04606561715184],
+                center: Positions.center,
                 maxBounds: [
                     [121.3870596781498, 24.95733863075891], // Southwest coordinates
                     [121.6998231749096, 25.21179993640203] // Northeast coordinates
                 ],
                 zoom:12.5,
                 minZoom: 11,
-                maxZoom: 20,
-                // zoom: 15.35, // Less than 15 GetFeatureInfo does not work
-                // pitch: 75, //视野倾斜，0-60
-                // bearing: 40, //视野旋转角度
+                maxZoom: 22
             })
 
             // Add zoom and rotation controls to the map.
@@ -184,24 +191,16 @@ export default {
             this.MapBoxObject.on('render', () => {});
             this.MapBoxObject.on('idle', () => {
                 this.mapLoadong = false
-            });
+            })
             this.MapBoxObject.on('error', () => {
                 console.log('A error event occurred.')
             })
         },
         mapLoadLayer() {
             this.mapLoadong = true
+            this.canUsefreeCamera = true
             //1) Taipei 3D buildings 
-            if(this.connectServer){
-                //from geoserver
-                this.MapBoxObject.addSource('TaipeiBuild', {
-                    type: "vector",
-                    scheme: "tms",
-                    tiles: [ `${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_building_height@EPSG:900913@pbf/{z}/{x}/{y}.pbf`]
-                }).addLayer(mapLayerStyle.taipeiBuilding)
-            }else{
-                this.MapBoxObject.addLayer(mapLayerStyle.buildingsIn3D)
-            }
+            this.MapBoxObject.addLayer(mapLayerStyle.buildingsIn3D)
 
             //2) Unstable Geoserver source - taipei_village & tp_village
             this.$api_method.get(`../../datas/taipei_town.geojson`).then((response) => {
@@ -215,18 +214,18 @@ export default {
                 this.fetchDataToMap(this.topicToggleContent)
             }
 
-            // this.MapBoxObject.on("click", (event) => {
-            //     this.MapBoxObject.getCanvas().style.cursor = 'pointer'
-            //     this.clickFeatureDatas = this.MapBoxObject.queryRenderedFeatures(event.point, { layers: this.mapDisplayLayers })
-            //     if(this.clickFeatureDatas.length > 0){
-            //         this.mapboxPopupGetInfo(event)
-            //     }
+            this.MapBoxObject.on("click", (event) => {
+                this.MapBoxObject.getCanvas().style.cursor = 'pointer'
+                this.clickFeatureDatas = this.MapBoxObject.queryRenderedFeatures(event.point, { layers: this.mapDisplayLayers })
+                if(this.clickFeatureDatas.length > 0){
+                    this.mapboxPopupGetInfo(event)
+                }
             //     // console.log( this.MapBoxObject.getBounds())
             //     // console.log( this.MapBoxObject.getCenter())
             //     // console.log( this.MapBoxObject.getBearing())
             //     // console.log( this.MapBoxObject.getZoom())
             // //     // console.log(JSON.stringify(event.lngLat.wrap()))
-            // })
+            })
         },
         fetchDataToMap(themeObj){
             if(themeObj && themeObj.length > 0){
@@ -286,7 +285,7 @@ export default {
             let clickedLayerId = clickedFeatureLayer.layer.id
             if(['buslive-route', 'buslive-point'].includes(clickedLayerId)) clickedLayerId = 'buslive'
 
-            new mapboxgl.Popup()
+            this.MapBoxPopup = new mapboxgl.Popup()
             .setLngLat(event.lngLat)
             .setHTML('<div id="vue-popup-content"></div>')
             .addTo(this.MapBoxObject)
@@ -510,19 +509,13 @@ export default {
                 this.MapBoxObject.setLayoutProperty(`${realtimeItemIndex}`, 'visibility', (dataToggle)? 'visible': 'none')
             }
         },
-        // fitTaipei(){
-        //     this.MapBoxObject.fitBounds([
-        //         [121.6292953491211,24.978589201164247],
-        //         [121.4542007446289, 25.21363862583486]
-        //     ]);
-        // },
         getTargetColor(componentColorArray) {
             const targetColor =  (componentColorArray)? componentColorArray: BasicColors[0]
             return (targetColor)? targetColor: targetColor[0]
         },
         getDataLayerBeforeId(){
             // Add the layer before the existing `3d-buildings` | `hessen` layer
-            const target = (this.connectServer)? 'hessen': '3d-buildings'
+            const target = '3d-buildings'
             const targetLayer = this.MapBoxObject.getStyle().layers.find(item => (item.id === target))
             return (targetLayer)? target: null
         },
@@ -572,7 +565,6 @@ export default {
         },
         historyMapFilter(){
             if(this.historyFilter && this.historyFilter.start && this.historyFilter.end){
-                console.log(1);
                 const MapBoxObjectProperty = [
                     "any",  
                     ['!', ['has', 'epoch_time']],
@@ -610,7 +602,6 @@ export default {
                         const lineString = turf.lineString(coordinates)
                         const length = turf.length(lineString, {units: 'kilometers'})
                         innreHtml(length)
-                        console.log(length);
                     }else if(type === 'Polygon'){
                         const polygon = turf.polygon(coordinates)
                         const area = turf.area(polygon, {units: 'kilometers'})

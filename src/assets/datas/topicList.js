@@ -680,6 +680,7 @@ export const topicComponentList = [
                     }
                 ]
             },
+            /*
             {
                 index: 'building_age',
                 name: '全市屋齡分布',
@@ -754,6 +755,7 @@ export const topicComponentList = [
                     }
                 ]
             }
+            */
         ]
     }
 ]
