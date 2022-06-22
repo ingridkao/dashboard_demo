@@ -10,9 +10,9 @@ cd dist
 # 因為dist資料夾預設是被ignore的，因此在進入dist資料夾後初始化git
 git init
 git add -A
-git commit -m 'Deploy v0.2.0_20220622: 新增noGeoserver branch，此版本可以離線Demo'
+git commit -m 'Deploy v0.2.1_20220622: 新增noGeoserver branch，此版本可以離線Demo'
 
-# 將 dist資料夾中的內容推送至遠端 taxi_effective main分支中，並強制無條件將舊有的內容取代成目前的內容（指令 git push -f)
-git push -f https://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@github.com/ingridkao/dashboard_demo.git master:github-pages
+# 將 dist資料夾中的內容推送至遠端github-pages分支中，並強制無條件將舊有的內容取代成目前的內容（指令 git push -f)
+git push -f https://<Personal access tokens>@github.com/<Github account>/<Repository name>.git master:github-pages
 cd -
 ~
