@@ -14,8 +14,8 @@ npm install --force
     VUE_APP_I18N_LOCALE=zh-TW
     VUE_APP_I18N_FALLBACK_LOCALE=zh-TW
     VUE_APP_BASE_URL=/dashboard_demo
-    VUE_APP_DOMAIN_RUL=https://ingridkao.github.io/dashboard_demo/
     VUE_APP_GOOGLE_ANALYTICS=G-XXXXXXXXX
+    VUE_APP_SHARE=https://ingridkao.github.io/dashboard_demo/
     VUE_APP_MAPBOXTOKEN=pk.?????????
 
     ```
